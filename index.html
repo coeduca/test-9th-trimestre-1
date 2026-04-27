@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html translate="no" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="es">
+  <title>Examen Trimestre 1 - Noveno</title>
+  <link rel="stylesheet" href="coeduca-core.css">
+  <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="students.js"></script>
+  <script src="rigo.js"></script>
+  <script src="coeduca-core.js"></script>
+  <script src="coeduca-exercises.js"></script>
+  <script src="coeduca-games.js"></script>
+  <rigo-mascot></rigo-mascot>
+  <script>
+    COEDUCA.init({
+      id: 'exam_t1_noveno_2026',
+      container: '#app',
+      topic: 'Examen Trimestre 1 - Adjectives & Past Verbs',
+      level: 'Noveno',
+      pdfDesign: 'PopArt',
+      examMode: true,
+	  examPools: {
+        // Pool A
+        '20062471': 'A', // Diego Aguilero
+        '19967146': 'A', // Elizabeth Canas
+        '20200673': 'A', // Michel Escobar
+        '19967150': 'A', // Anggie Lopez
+        '19967154': 'A', // Cesar Rivas
+  
+        // Pool B
+        '19967142': 'B', // Darwin Alfaro
+        '19967145': 'B', // Oscar Fuentes
+        '19934096': 'B', // Gisela Cordova
+        '20062484': 'B', // Wendy Garcia
+        '20062486': 'B', // Rosa Maldonado
+        '20062489': 'B', // Ernesto Martinez
+        '20023247': 'B', // Alexandra Monterroza
+  
+        // Pool C
+        '19971566': 'C', // Dayana Angulo
+        '20062474': 'C', // Cesar David
+        '19934095': 'C', // Ingrid Cordova
+        '19934098': 'C', // Adonay Hernandez
+        '19976021': 'C', // Damary Martinez
+  
+        // Pool D
+        '19971565': 'D', // Yesenia Angulo (Asignada en lugar de "Esmeralda")
+        '19967143': 'D', // Marlon Barrera
+        '4210274':  'D', // Pedro Escamilla
+        '19976024': 'D', // Anahy Munoz
+        '20062495': 'D', // Carolina Osorio
+        '19956103': 'D', // Griseida Perez
+        '20062498': 'D'  // Silvia Ramos
+      },
+      colors: {
+        primary: '#B39DDB',
+        accent: '#81D4FA',
+        bg: '#7E57C2'
+      },
+      exercises: [
+
+        // ============================================================
+        // EJERCICIO 1: MULTIPLE CHOICE - LISTENING (Adjectives)
+        // ============================================================
+        {
+          type: 'multiplechoice',
+          title: 'Listening: Descriptive Adjectives',
+          instruction: 'Listen to the audio and choose the correct adjective you hear for each number.',
+          audioA: 'files/Set1.mp3',
+          audioB: 'files/Set2.mp3',
+          audioC: 'files/Set3.mp3',
+          audioD: 'files/Set4.mp3',
+          dataA: [
+            { q: 'Number 1', options: ['famous', 'creative', 'brave'], answer: 0 },
+            { q: 'Number 2', options: ['hard-working', 'talented', 'intelligent'], answer: 1 },
+            { q: 'Number 3', options: ['brave', 'influential', 'famous'], answer: 1 },
+            { q: 'Number 4', options: ['creative', 'brave', 'talented'], answer: 1 },
+            { q: 'Number 5', options: ['hard-working', 'intelligent', 'famous'], answer: 0 }
+          ],
+          dataB: [
+            { q: 'Number 1', options: ['influential', 'talented', 'brave'], answer: 1 },
+            { q: 'Number 2', options: ['creative', 'famous', 'hard-working'], answer: 0 },
+            { q: 'Number 3', options: ['intelligent', 'brave', 'talented'], answer: 1 },
+            { q: 'Number 4', options: ['hard-working', 'creative', 'influential'], answer: 0 },
+            { q: 'Number 5', options: ['brave', 'famous', 'talented'], answer: 1 }
+          ],
+          dataC: [
+            { q: 'Number 1', options: ['famous', 'hard-working', 'creative'], answer: 1 },
+            { q: 'Number 2', options: ['talented', 'brave', 'influential'], answer: 0 },
+            { q: 'Number 3', options: ['hard-working', 'brave', 'famous'], answer: 1 },
+            { q: 'Number 4', options: ['creative', 'intelligent', 'talented'], answer: 0 },
+            { q: 'Number 5', options: ['famous', 'hard-working', 'brave'], answer: 0 }
+          ],
+          dataD: [
+            { q: 'Number 1', options: ['brave', 'famous', 'talented'], answer: 0 },
+            { q: 'Number 2', options: ['hard-working', 'creative', 'influential'], answer: 1 },
+            { q: 'Number 3', options: ['talented', 'brave', 'creative'], answer: 0 },
+            { q: 'Number 4', options: ['intelligent', 'hard-working', 'famous'], answer: 1 },
+            { q: 'Number 5', options: ['influential', 'talented', 'brave'], answer: 0 }
+          ]
+        },
+
+        // ============================================================
+        // EJERCICIO 2: MATCH IMAGE - Past Verbs
+        // ============================================================
+        {
+          type: 'matchimage',
+          title: 'Match the Past Verb',
+          instruction: 'Drag each past tense verb to its matching picture.',
+          dataA: [
+            { word: 'drove', image: 'files/man-drive-a-car.webp' },
+            { word: 'swam', image: 'files/boy-swimming.webp' },
+            { word: 'read', image: 'files/girl-reading-a-book.avif' },
+            { word: 'wrote', image: 'files/girl-writing.avif' },
+            { word: 'cooked', image: 'files/man-chef-cooking.avif' },
+            { word: 'played', image: 'files/child-playing-guitar.avif' }
+          ],
+          dataB: [
+            { word: 'washed', image: 'files/boy-washing-dishes.webp' },
+            { word: 'threw', image: 'files/a-man-playing-about-to-throw-a-ball.webp' },
+            { word: 'studied', image: 'files/boy-studying-sitting-desk.webp' },
+            { word: 'thought', image: 'files/woman-thinking.avif' },
+            { word: 'drove', image: 'files/man-drive-a-car.webp' },
+            { word: 'read', image: 'files/girl-reading-a-book.avif' }
+          ],
+          dataC: [
+            { word: 'swam', image: 'files/boy-swimming.webp' },
+            { word: 'wrote', image: 'files/girl-writing.avif' },
+            { word: 'worked', image: 'files/man-on-a-laptop-office.avif' },
+            { word: 'washed', image: 'files/girl-washing-dishes.png' },
+            { word: 'played', image: 'files/child-playing-guitar.avif' },
+            { word: 'thought', image: 'files/girl-thinking.avif' }
+          ],
+          dataD: [
+            { word: 'cooked', image: 'files/man-chef-cooking.avif' },
+            { word: 'threw', image: 'files/a-man-playing-about-to-throw-a-ball.webp' },
+            { word: 'studied', image: 'files/boy-studying-sitting-desk.webp' },
+            { word: 'drove', image: 'files/man-drive-a-car.webp' },
+            { word: 'broke', image: 'files/egg-outside-the-broken-shell.jpg' },
+            { word: 'read', image: 'files/girl-reading-a-book.avif' }
+          ]
+        },
+
+        // ============================================================
+        // EJERCICIO 3: CATEGORIZE - Regular / Irregular Verbs
+        // ============================================================
+        {
+          type: 'categorize',
+          title: 'Classify: Regular or Irregular Verbs',
+          instruction: 'Drag each verb to the correct category.',
+          dataA: {
+            categories: ['Regular Verbs', 'Irregular Verbs'],
+            items: [
+              { text: 'played', cat: 0 },
+              { text: 'cooked', cat: 0 },
+              { text: 'studied', cat: 0 },
+              { text: 'washed', cat: 0 },
+              { text: 'worked', cat: 0 },
+              { text: 'drove', cat: 1 },
+              { text: 'swam', cat: 1 },
+              { text: 'wrote', cat: 1 },
+              { text: 'thought', cat: 1 },
+              { text: 'broke', cat: 1 }
+            ]
+          },
+          dataB: {
+            categories: ['Regular Verbs', 'Irregular Verbs'],
+            items: [
+              { text: 'walked', cat: 0 },
+              { text: 'cleaned', cat: 0 },
+              { text: 'listened', cat: 0 },
+              { text: 'watched', cat: 0 },
+              { text: 'talked', cat: 0 },
+              { text: 'ran', cat: 1 },
+              { text: 'ate', cat: 1 },
+              { text: 'sang', cat: 1 },
+              { text: 'took', cat: 1 },
+              { text: 'made', cat: 1 }
+            ]
+          },
+          dataC: {
+            categories: ['Regular Verbs', 'Irregular Verbs'],
+            items: [
+              { text: 'danced', cat: 0 },
+              { text: 'helped', cat: 0 },
+              { text: 'opened', cat: 0 },
+              { text: 'called', cat: 0 },
+              { text: 'closed', cat: 0 },
+              { text: 'saw', cat: 1 },
+              { text: 'went', cat: 1 },
+              { text: 'came', cat: 1 },
+              { text: 'read', cat: 1 },
+              { text: 'knew', cat: 1 }
+            ]
+          },
+          dataD: {
+            categories: ['Regular Verbs', 'Irregular Verbs'],
+            items: [
+              { text: 'painted', cat: 0 },
+              { text: 'jumped', cat: 0 },
+              { text: 'visited', cat: 0 },
+              { text: 'finished', cat: 0 },
+              { text: 'started', cat: 0 },
+              { text: 'flew', cat: 1 },
+              { text: 'gave', cat: 1 },
+              { text: 'spoke', cat: 1 },
+              { text: 'drank', cat: 1 },
+              { text: 'slept', cat: 1 }
+            ]
+          }
+        },
+
+        // ============================================================
+        // EJERCICIO 4: TRUE/FALSE - Reading Comprehension
+        // ============================================================
+        {
+          type: 'truefalse',
+          title: 'Reading Comprehension',
+          instruction: 'Read the story and select TRUE or FALSE for each statement.',
+          dataA: [
+            { statement: 'Read the story: Last weekend, Maria worked at a restaurant. She cooked pasta and washed all the dishes. She was very hard-working. Her boss said she was talented because the food was delicious. --- Maria worked at a school last weekend.', answer: false },
+            { statement: 'Maria cooked pasta.', answer: true },
+            { statement: 'Maria washed all the dishes.', answer: true },
+            { statement: 'Her boss said she was lazy.', answer: false },
+            { statement: 'The food was delicious.', answer: true },
+            { statement: 'Maria was described as hard-working.', answer: true }
+          ],
+          imageA: 'files/man-chef-cooking.avif',
+          dataB: [
+            { statement: 'Read the story: Yesterday, Carlos studied English for two hours. He read a book about famous people and wrote notes in his notebook. His teacher said he was very intelligent. Carlos thought the book was interesting. --- Carlos studied math yesterday.', answer: false },
+            { statement: 'Carlos read a book about famous people.', answer: true },
+            { statement: 'He wrote notes in his notebook.', answer: true },
+            { statement: 'His teacher said he was creative.', answer: false },
+            { statement: 'Carlos thought the book was boring.', answer: false },
+            { statement: 'Carlos studied for two hours.', answer: true }
+          ],
+          imageB: 'files/girl-thinking.avif',
+          dataC: [
+            { statement: 'Read the story: On Monday, Ana swam in the pool for one hour. Then she played guitar and danced with her friends. Everyone said she was very creative and talented. Ana was also brave because she tried new things. --- Ana swam in the ocean.', answer: false },
+            { statement: 'Ana played guitar.', answer: true },
+            { statement: 'She danced with her friends.', answer: true },
+            { statement: 'People said Ana was lazy.', answer: false },
+            { statement: 'Ana was described as brave.', answer: true },
+            { statement: 'Ana tried new things.', answer: true }
+          ],
+          imageC: 'files/boy-swimming.webp',
+          dataD: [
+            { statement: 'Read the story: Last Friday, Pedro drove to the city. He visited a museum and saw paintings by influential artists. He thought the art was beautiful. Pedro took many photos and called his friends to tell them about it. --- Pedro walked to the city.', answer: false },
+            { statement: 'Pedro visited a museum.', answer: true },
+            { statement: 'He saw paintings by influential artists.', answer: true },
+            { statement: 'Pedro thought the art was ugly.', answer: false },
+            { statement: 'Pedro took many photos.', answer: true },
+            { statement: 'Pedro called his friends.', answer: true }
+          ],
+          imageD: 'files/man-drive-a-car.webp'
+        },
+
+        // ============================================================
+        // EJERCICIO 5: MATCHLINES - Irregular Verbs Present -> Past
+        // ============================================================
+        {
+          type: 'matchlines',
+          title: 'Match: Irregular Verbs (Present → Past)',
+          instruction: 'Connect each verb in present tense with its past tense form.',
+          dataA: [
+            { left: 'drive', right: 'drove' },
+            { left: 'swim', right: 'swam' },
+            { left: 'write', right: 'wrote' },
+            { left: 'think', right: 'thought' },
+            { left: 'break', right: 'broke' },
+            { left: 'eat', right: 'ate' }
+          ],
+          dataB: [
+            { left: 'run', right: 'ran' },
+            { left: 'sing', right: 'sang' },
+            { left: 'take', right: 'took' },
+            { left: 'make', right: 'made' },
+            { left: 'see', right: 'saw' },
+            { left: 'go', right: 'went' }
+          ],
+          dataC: [
+            { left: 'come', right: 'came' },
+            { left: 'know', right: 'knew' },
+            { left: 'read', right: 'read' },
+            { left: 'fly', right: 'flew' },
+            { left: 'give', right: 'gave' },
+            { left: 'speak', right: 'spoke' }
+          ],
+          dataD: [
+            { left: 'drink', right: 'drank' },
+            { left: 'sleep', right: 'slept' },
+            { left: 'throw', right: 'threw' },
+            { left: 'swim', right: 'swam' },
+            { left: 'write', right: 'wrote' },
+            { left: 'drive', right: 'drove' }
+          ]
+        },
+
+        // ============================================================
+        // EJERCICIO 6: DROPDOWN - Regular Verbs (Past Tense)
+        // ============================================================
+        {
+          type: 'dropdown',
+          title: 'Complete: Regular Verbs in Past Tense',
+          instruction: 'Choose the correct past tense form of the regular verb.',
+          dataA: [
+            { before: 'Yesterday I', options: ['play', 'played', 'playing'], answer: 1, after: 'soccer with my friends.' },
+            { before: 'She', options: ['cook', 'cooked', 'cooking'], answer: 1, after: 'dinner for the family.' },
+            { before: 'We', options: ['studied', 'study', 'studies'], answer: 0, after: 'English all morning.' },
+            { before: 'They', options: ['wash', 'washing', 'washed'], answer: 2, after: 'the car last Saturday.' },
+            { before: 'He', options: ['works', 'worked', 'working'], answer: 1, after: 'at the office until 6 PM.' },
+            { before: 'Maria', options: ['danced', 'dance', 'dances'], answer: 0, after: 'at the party last night.' }
+          ],
+          dataB: [
+            { before: 'Last week I', options: ['walking', 'walked', 'walk'], answer: 1, after: 'to school every day.' },
+            { before: 'He', options: ['clean', 'cleaned', 'cleaning'], answer: 1, after: 'his room yesterday.' },
+            { before: 'We', options: ['listened', 'listen', 'listens'], answer: 0, after: 'to music after class.' },
+            { before: 'She', options: ['watch', 'watching', 'watched'], answer: 2, after: 'a movie on Friday.' },
+            { before: 'They', options: ['talks', 'talked', 'talking'], answer: 1, after: 'about the homework.' },
+            { before: 'The teacher', options: ['helped', 'help', 'helps'], answer: 0, after: 'us with the project.' }
+          ],
+          dataC: [
+            { before: 'On Sunday I', options: ['opened', 'open', 'opens'], answer: 0, after: 'a new book to read.' },
+            { before: 'She', options: ['call', 'called', 'calling'], answer: 1, after: 'her grandmother.' },
+            { before: 'They', options: ['close', 'closing', 'closed'], answer: 2, after: 'the store at 9 PM.' },
+            { before: 'We', options: ['painted', 'paint', 'paints'], answer: 0, after: 'a picture in art class.' },
+            { before: 'He', options: ['jumps', 'jumped', 'jumping'], answer: 1, after: 'over the fence.' },
+            { before: 'Ana', options: ['visited', 'visit', 'visits'], answer: 0, after: 'her cousins last month.' }
+          ],
+          dataD: [
+            { before: 'Yesterday she', options: ['finish', 'finished', 'finishing'], answer: 1, after: 'her homework early.' },
+            { before: 'I', options: ['started', 'start', 'starts'], answer: 0, after: 'a new class this week.' },
+            { before: 'They', options: ['play', 'playing', 'played'], answer: 2, after: 'video games after dinner.' },
+            { before: 'We', options: ['cleaned', 'clean', 'cleans'], answer: 0, after: 'the classroom together.' },
+            { before: 'He', options: ['dance', 'danced', 'dancing'], answer: 1, after: 'at the school festival.' },
+            { before: 'The students', options: ['worked', 'work', 'works'], answer: 0, after: 'on a group project.' }
+          ]
+        },
+
+        // ============================================================
+        // EJERCICIO 7: REORDER LETTERS - Past Verbs
+        // ============================================================
+        {
+          type: 'reorder_letters',
+          title: 'Unscramble: Past Tense Verbs',
+          instruction: 'Rearrange the letters to form the correct past tense verb. Use the hint to help you.',
+          dataA: [
+            { word: 'PLAYED', hint: 'Past of PLAY' },
+            { word: 'DROVE', hint: 'Past of DRIVE' },
+            { word: 'COOKED', hint: 'Past of COOK' },
+            { word: 'SWAM', hint: 'Past of SWIM' },
+            { word: 'WROTE', hint: 'Past of WRITE' },
+            { word: 'WASHED', hint: 'Past of WASH' }
+          ],
+          dataB: [
+            { word: 'WALKED', hint: 'Past of WALK' },
+            { word: 'SANG', hint: 'Past of SING' },
+            { word: 'TALKED', hint: 'Past of TALK' },
+            { word: 'TOOK', hint: 'Past of TAKE' },
+            { word: 'CLEANED', hint: 'Past of CLEAN' },
+            { word: 'WENT', hint: 'Past of GO' }
+          ],
+          dataC: [
+            { word: 'DANCED', hint: 'Past of DANCE' },
+            { word: 'FLEW', hint: 'Past of FLY' },
+            { word: 'OPENED', hint: 'Past of OPEN' },
+            { word: 'CAME', hint: 'Past of COME' },
+            { word: 'HELPED', hint: 'Past of HELP' },
+            { word: 'KNEW', hint: 'Past of KNOW' }
+          ],
+          dataD: [
+            { word: 'STARTED', hint: 'Past of START' },
+            { word: 'THREW', hint: 'Past of THROW' },
+            { word: 'JUMPED', hint: 'Past of JUMP' },
+            { word: 'SLEPT', hint: 'Past of SLEEP' },
+            { word: 'VISITED', hint: 'Past of VISIT' },
+            { word: 'DRANK', hint: 'Past of DRINK' }
+          ]
+        }
+
+      ]
+      // Sin juego para esta sesion
+    });
+  </script>
+</body>
+</html>
