@@ -1,24 +1,42 @@
 /* ==========================================================================
-   COEDUCA Framework v1 - Core CSS (Pop Art ENHANCED)
+   COEDUCA Framework v1 - Core CSS (Glassmorphism)
    Profesor José Eliseo Martínez - COEDUCA
    ========================================================================== */
 
 :root {
-  --coeduca-primary: #FFD700;
-  --coeduca-accent: #FF6B9D;
-  --coeduca-bg: #FFF8E7;
-  --coeduca-surface: #FFFFFF;
-  --coeduca-stroke: #1a1a1a;
-  --coeduca-text: #1a1a1a;
-  --coeduca-success: #4CAF50;
-  --coeduca-error: #E63946;
-  --coeduca-info: #4FC3F7;
-  --coeduca-purple: #9B5DE5;
-  --coeduca-orange: #FF9F1C;
-  --coeduca-shadow: 5px 5px 0 #1a1a1a;
-  --coeduca-shadow-sm: 3px 3px 0 #1a1a1a;
-  --coeduca-shadow-lg: 8px 8px 0 #1a1a1a;
-  --coeduca-radius: 16px;
+  /* Paleta principal: violeta/rosa/cyan moderno */
+  --coeduca-primary:    #7C5CFF;          /* violeta */
+  --coeduca-primary-2:  #5B8DEF;          /* azul-violeta */
+  --coeduca-accent:     #FF5C8A;          /* rosa frambuesa */
+  --coeduca-accent-2:   #FF9A8B;          /* coral suave */
+  --coeduca-cyan:       #4FD1C5;          /* turquesa */
+  --coeduca-amber:      #F6B93B;          /* ámbar suave */
+  --coeduca-success:    #38B26A;
+  --coeduca-error:      #E63946;
+  --coeduca-info:       #4FC3F7;
+  --coeduca-purple:     #9B5DE5;
+
+  /* Texto */
+  --coeduca-text:        #1f2240;
+  --coeduca-text-soft:   #4b4f73;
+  --coeduca-text-muted:  #7a7f9c;
+
+  /* Superficies (vidrio) */
+  --coeduca-bg:          #f4f1ff;
+  --coeduca-glass-bg:    rgba(255, 255, 255, 0.55);
+  --coeduca-glass-bg-2:  rgba(255, 255, 255, 0.72);
+  --coeduca-glass-brd:   rgba(255, 255, 255, 0.65);
+  --coeduca-glass-brd-2: rgba(124, 92, 255, 0.18);
+  --coeduca-surface:     #ffffff;
+
+  /* Sombras suaves (no offset hard) */
+  --coeduca-shadow-sm: 0 4px 14px rgba(56, 38, 130, 0.10);
+  --coeduca-shadow:    0 10px 30px rgba(56, 38, 130, 0.14);
+  --coeduca-shadow-lg: 0 20px 50px rgba(56, 38, 130, 0.18);
+
+  --coeduca-radius:    18px;
+  --coeduca-radius-sm: 12px;
+  --coeduca-radius-lg: 24px;
 }
 
 * {
@@ -34,40 +52,36 @@ html, body {
   -webkit-touch-callout: none;
   margin: 0;
   padding: 0;
-  font-family: 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif;
-  background: var(--coeduca-bg);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: var(--coeduca-text);
+  background: var(--coeduca-bg);
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* Halftones de fondo (Pop Art) - layered, bolder */
+/* Fondo con manchas de color suaves (glassmorphism canvas) */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.10) 1.4px, transparent 0),
-    radial-gradient(circle at 12px 12px, rgba(255, 107, 157, 0.18) 2px, transparent 0);
-  background-size: 22px 22px, 44px 44px;
-  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(124, 92, 255, 0.45) 0%, transparent 42%),
+    radial-gradient(circle at 88% 14%, rgba(255, 92, 138, 0.40) 0%, transparent 42%),
+    radial-gradient(circle at 50% 92%, rgba(79, 209, 197, 0.40) 0%, transparent 45%),
+    linear-gradient(135deg, #f4f1ff 0%, #fdf2f8 50%, #ecfeff 100%);
   z-index: 0;
+  pointer-events: none;
 }
-
-/* Diagonal pop-art rays from top-left */
+/* Capa fina de ruido/textura para que el blur tenga algo a lo que abrazarse */
 body::after {
   content: '';
   position: fixed;
-  top: -120px;
-  left: -120px;
-  width: 480px;
-  height: 480px;
-  background: repeating-conic-gradient(
-    from 0deg at 50% 50%,
-    rgba(255, 215, 0, 0.10) 0deg 12deg,
-    transparent 12deg 24deg
-  );
-  pointer-events: none;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(124, 92, 255, 0.06) 1px, transparent 0);
+  background-size: 24px 24px;
   z-index: 0;
+  pointer-events: none;
 }
 
 .coeduca-app {
@@ -75,234 +89,232 @@ body::after {
   z-index: 1;
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px 16px 140px;
+  padding: 24px 18px 140px;
 }
 
-/* ===== HEADER ===== */
+/* ===== HEADER (glass) ===== */
 .coeduca-header {
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.18) 0 12px, transparent 12px 24px),
-    linear-gradient(135deg, var(--coeduca-primary) 0%, #FFC700 100%);
-  border: 5px solid var(--coeduca-stroke);
-  border-radius: var(--coeduca-radius);
-  padding: 22px 24px;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.85) 0%, rgba(255, 92, 138, 0.80) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--coeduca-radius-lg);
+  padding: 28px 26px 24px;
   margin-bottom: 28px;
   box-shadow: var(--coeduca-shadow);
   text-align: center;
   position: relative;
   overflow: hidden;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
 }
-/* Burst circle on the right */
-.coeduca-header::after {
-  content: '';
-  position: absolute;
-  top: -28px; right: -28px;
-  width: 110px; height: 110px;
-  background:
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.55), transparent 55%),
-    var(--coeduca-accent);
-  border: 4px solid var(--coeduca-stroke);
-  border-radius: 50%;
-  opacity: 0.9;
-  box-shadow: -3px 3px 0 var(--coeduca-stroke);
-}
-/* Small dot on the left */
+/* Brillo superior tipo cristal */
 .coeduca-header::before {
   content: '';
   position: absolute;
-  bottom: -18px; left: -18px;
-  width: 60px; height: 60px;
-  background: var(--coeduca-info);
-  border: 3px solid var(--coeduca-stroke);
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: var(--coeduca-radius-lg) var(--coeduca-radius-lg) 0 0;
+}
+/* Halo decorativo */
+.coeduca-header::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 70%);
   border-radius: 50%;
-  opacity: 0.8;
-  z-index: 0;
+  pointer-events: none;
 }
 .coeduca-header h1 {
-  margin: 0 0 6px;
-  font-size: clamp(22px, 5.5vw, 34px);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #fff;
-  -webkit-text-stroke: 2px var(--coeduca-stroke);
-  text-shadow:
-    3px 3px 0 var(--coeduca-stroke),
-    6px 6px 0 var(--coeduca-accent);
+  margin: 0 0 8px;
+  font-size: clamp(22px, 5.2vw, 32px);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
   position: relative;
   z-index: 1;
 }
 .coeduca-header p {
   margin: 0;
-  font-size: 14px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: 600;
   position: relative;
   z-index: 1;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
   display: inline-block;
-  padding: 3px 10px;
+  padding: 5px 14px;
   border-radius: 50px;
-  border: 2px solid var(--coeduca-stroke);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
-/* Nombres de estudiantes en el header */
+/* Estudiantes en el header */
 .coeduca-header-students {
-  margin-top: 14px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.85);
-  border: 3px dashed var(--coeduca-stroke);
-  border-radius: 12px;
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--coeduca-radius-sm);
   font-size: 13px;
   text-align: left;
   position: relative;
   z-index: 1;
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
 }
 .coeduca-header-students:empty { display: none; }
 .coeduca-header-students-label {
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 11px;
-  letter-spacing: 0.5px;
-  margin-right: 4px;
+  letter-spacing: 1px;
+  margin-right: 6px;
+  opacity: 0.9;
 }
 .coeduca-header-student-pill {
   display: inline-block;
-  background: var(--coeduca-accent);
-  color: var(--coeduca-surface);
-  border: 2px solid var(--coeduca-stroke);
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--coeduca-primary);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 50px;
-  padding: 3px 11px;
-  margin: 2px 3px;
+  padding: 4px 12px;
+  margin: 3px;
   font-size: 12px;
-  font-weight: 900;
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Botón "+ Agregar miembro" en header */
 .coeduca-add-member-btn {
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 12px !important;
-  padding: 7px 14px !important;
+  padding: 8px 16px !important;
   position: relative;
   z-index: 1;
 }
 .coeduca-add-member-btn:disabled {
   cursor: not-allowed;
   pointer-events: none;
+  opacity: 0.6;
 }
 
-/* ===== EXERCISE CARD ===== */
+/* ===== EXERCISE CARD (glass) ===== */
 .coeduca-exercise {
-  background: var(--coeduca-surface);
-  border: 5px solid var(--coeduca-stroke);
-  border-radius: var(--coeduca-radius);
-  padding: 22px 20px 20px;
+  background: var(--coeduca-glass-bg-2);
+  border: 1px solid var(--coeduca-glass-brd);
+  border-radius: var(--coeduca-radius-lg);
+  padding: 26px 22px 22px;
   margin-bottom: 26px;
-  box-shadow: var(--coeduca-shadow);
-  animation: coeducaPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: var(--coeduca-shadow-sm);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  animation: coeducaPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
-}
-/* Ben-day dots in corner of each exercise */
-.coeduca-exercise::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  width: 60px;
-  height: 30px;
-  background-image: radial-gradient(circle, var(--coeduca-accent) 1.5px, transparent 2px);
-  background-size: 8px 8px;
-  opacity: 0.45;
-  pointer-events: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 @keyframes coeducaPopIn {
-  0%   { opacity: 0; transform: scale(0.85) translateY(20px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
+@media (hover: hover) {
+  .coeduca-exercise:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--coeduca-shadow);
+  }
+}
+
 .coeduca-exercise-title {
   display: inline-block;
-  background: var(--coeduca-accent);
-  color: var(--coeduca-surface);
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 12px;
-  padding: 7px 16px;
-  margin: -34px 0 16px -10px;
-  font-size: 16px;
-  font-weight: 900;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 8px 18px;
+  margin: -42px 0 18px 0;
+  font-size: 14px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: var(--coeduca-shadow-sm);
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  transform: rotate(-1.5deg);
+  box-shadow: 0 6px 20px rgba(124, 92, 255, 0.35);
   position: relative;
   z-index: 1;
 }
+
 .coeduca-exercise-instruction {
-  background: linear-gradient(90deg, #FFFEF0 0%, #fff 100%);
-  border-left: 6px solid var(--coeduca-primary);
-  border-top: 2px solid var(--coeduca-stroke);
-  border-right: 2px solid var(--coeduca-stroke);
-  border-bottom: 2px solid var(--coeduca-stroke);
-  padding: 10px 14px;
-  margin: 0 0 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(124, 92, 255, 0.18);
+  border-left: 4px solid var(--coeduca-primary);
+  padding: 12px 16px;
+  margin: 0 0 18px;
   font-size: 14px;
   font-style: italic;
-  font-weight: bold;
-  border-radius: 0 10px 10px 0;
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
-}
-.coeduca-exercise-score {
-  float: right;
-  background: var(--coeduca-primary);
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 10px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-weight: 900;
-  margin-left: 10px;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+  font-weight: 500;
+  color: var(--coeduca-text-soft);
+  border-radius: 0 var(--coeduca-radius-sm) var(--coeduca-radius-sm) 0;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
-/* ===== NOTE (escape hatch) ===== */
+.coeduca-exercise-score {
+  float: right;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 10px;
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+}
+
+/* ===== NOTE ===== */
 .coeduca-note {
-  background: var(--coeduca-surface);
-  border: 4px dashed var(--coeduca-stroke);
+  background: var(--coeduca-glass-bg-2);
+  border: 1px solid rgba(246, 185, 59, 0.4);
+  border-left: 4px solid var(--coeduca-amber);
   border-radius: var(--coeduca-radius);
-  padding: 16px 20px;
+  padding: 18px 22px 18px 26px;
   margin-bottom: 24px;
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
   position: relative;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  box-shadow: var(--coeduca-shadow-sm);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--coeduca-text-soft);
 }
 .coeduca-note::before {
-  content: '!';
+  content: 'i';
   position: absolute;
-  top: -16px;
-  left: 16px;
-  width: 32px;
-  height: 32px;
-  background: var(--coeduca-primary);
-  border: 3px solid var(--coeduca-stroke);
+  top: -14px;
+  left: 18px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--coeduca-amber) 0%, var(--coeduca-accent-2) 100%);
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-weight: 900;
-  font-size: 18px;
-  color: var(--coeduca-stroke);
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+  font-weight: 700;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  font-style: italic;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(246, 185, 59, 0.4);
 }
 .coeduca-note img,
 .coeduca-note video {
   max-width: 100%;
   height: auto;
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--coeduca-radius-sm);
   display: block;
-  margin: 10px auto;
-  box-shadow: 3px 3px 0 var(--coeduca-stroke);
+  margin: 12px auto;
+  box-shadow: var(--coeduca-shadow-sm);
 }
 
 /* ===== AUDIO PLAYER ===== */
@@ -310,40 +322,44 @@ body::after {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, var(--coeduca-info) 0%, #29B6F6 100%);
-  border: 3px solid var(--coeduca-stroke);
+  background: linear-gradient(135deg, rgba(91, 141, 239, 0.85) 0%, rgba(79, 209, 197, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 50px;
-  padding: 8px 18px 8px 8px;
+  padding: 8px 20px 8px 8px;
   margin: 0 0 18px;
   box-shadow: var(--coeduca-shadow-sm);
   width: fit-content;
   max-width: 100%;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .coeduca-audio-btn {
-  width: 50px; height: 50px;
-  border: 3px solid var(--coeduca-stroke);
+  width: 46px; height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  background: var(--coeduca-surface);
+  background: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  transition: transform 0.15s;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-.coeduca-audio-btn:hover { transform: scale(1.08) rotate(-5deg); }
-.coeduca-audio-btn:active { transform: scale(0.92); }
+.coeduca-audio-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+.coeduca-audio-btn:active { transform: scale(0.94); }
 .coeduca-audio-btn svg {
-  width: 22px; height: 22px;
-  fill: var(--coeduca-stroke);
+  width: 20px; height: 20px;
+  fill: var(--coeduca-primary);
 }
 .coeduca-audio-label {
-  font-weight: 900;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 13px;
   text-transform: uppercase;
   color: #fff;
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 
 /* ===== EXERCISE IMAGE ===== */
@@ -352,86 +368,103 @@ body::after {
   max-width: 100%;
   height: auto;
   margin: 0 auto 16px;
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 10px;
-  box-shadow: 3px 3px 0 var(--coeduca-stroke);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--coeduca-radius-sm);
+  box-shadow: var(--coeduca-shadow-sm);
 }
 
 /* ===== BUTTONS ===== */
 .coeduca-btn {
   display: inline-block;
-  background: var(--coeduca-primary);
-  color: var(--coeduca-stroke);
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 12px;
-  padding: 11px 20px;
-  font-size: 15px;
-  font-weight: 900;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-primary-2) 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 11px 22px;
+  font-size: 14px;
+  font-weight: 700;
   font-family: inherit;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
   cursor: pointer;
-  box-shadow: var(--coeduca-shadow-sm);
-  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 6px 18px rgba(124, 92, 255, 0.32);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
   text-decoration: none;
   position: relative;
+  overflow: hidden;
 }
 .coeduca-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--coeduca-stroke);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(124, 92, 255, 0.4);
+  filter: brightness(1.05);
 }
 .coeduca-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 var(--coeduca-stroke);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
 }
-.coeduca-btn-accent { background: var(--coeduca-accent); color: var(--coeduca-surface); text-shadow: 1px 1px 0 var(--coeduca-stroke); }
-.coeduca-btn-success { background: var(--coeduca-success); color: var(--coeduca-surface); text-shadow: 1px 1px 0 var(--coeduca-stroke); }
-.coeduca-btn-info { background: var(--coeduca-info); color: var(--coeduca-stroke); }
+.coeduca-btn-accent {
+  background: linear-gradient(135deg, var(--coeduca-accent) 0%, var(--coeduca-accent-2) 100%);
+  box-shadow: 0 6px 18px rgba(255, 92, 138, 0.35);
+}
+.coeduca-btn-accent:hover { box-shadow: 0 10px 24px rgba(255, 92, 138, 0.45); }
+.coeduca-btn-success {
+  background: linear-gradient(135deg, var(--coeduca-success) 0%, var(--coeduca-cyan) 100%);
+  box-shadow: 0 6px 18px rgba(56, 178, 106, 0.35);
+}
+.coeduca-btn-success:hover { box-shadow: 0 10px 24px rgba(56, 178, 106, 0.45); }
+.coeduca-btn-info {
+  background: linear-gradient(135deg, var(--coeduca-info) 0%, var(--coeduca-cyan) 100%);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(79, 195, 247, 0.35);
+}
 
 /* ===== INPUTS ===== */
 .coeduca-input {
-  background: var(--coeduca-surface);
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 10px;
-  padding: 9px 13px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(124, 92, 255, 0.22);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 10px 14px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 500;
   font-family: inherit;
   color: var(--coeduca-text);
   outline: none;
   user-select: text;
   -webkit-user-select: text;
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
-  transition: box-shadow 0.15s, transform 0.15s;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 .coeduca-input:focus {
-  background: #FFFEF0;
-  box-shadow: var(--coeduca-shadow-sm);
-  transform: translate(-1px, -1px);
+  background: #fff;
+  border-color: var(--coeduca-primary);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18), inset 0 1px 2px rgba(0,0,0,0.04);
 }
 .coeduca-input.correct {
-  background: #C8E6C9;
+  background: rgba(56, 178, 106, 0.12);
   border-color: var(--coeduca-success);
+  box-shadow: 0 0 0 4px rgba(56, 178, 106, 0.18);
   animation: coeducaCorrectPulse 0.4s ease;
 }
 .coeduca-input.wrong {
-  background: #FFCDD2;
+  background: rgba(230, 57, 70, 0.10);
   border-color: var(--coeduca-error);
+  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.16);
   animation: coeducaShake 0.3s;
 }
 @keyframes coeducaCorrectPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 /* ===== LOGIN MODAL ===== */
 .coeduca-login-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(26, 26, 26, 0.85);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(31, 34, 64, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 9998;
   display: grid;
   place-items: center;
@@ -441,19 +474,21 @@ body::after {
 @keyframes coeducaFadeIn { from {opacity:0} to {opacity:1} }
 
 .coeduca-login-modal {
-  background: var(--coeduca-surface);
-  border: 5px solid var(--coeduca-stroke);
-  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: var(--coeduca-radius-lg);
   padding: 0;
   max-width: 440px;
   width: 100%;
-  box-shadow: var(--coeduca-shadow-lg), 0 0 0 8px rgba(255, 215, 0, 0.18);
+  box-shadow: var(--coeduca-shadow-lg);
   animation: coeducaPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   max-height: 92vh;
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
 .coeduca-login-modal-scroll {
@@ -461,65 +496,58 @@ body::after {
   flex: 1;
 }
 
-.coeduca-login-modal::before {
-  content: '';
-  position: absolute;
-  top: -10px; right: -10px;
-  width: 78px; height: 78px;
-  background: var(--coeduca-accent);
-  border: 4px solid var(--coeduca-stroke);
-  border-radius: 50%;
-  z-index: 2;
-  pointer-events: none;
-  background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.55), transparent 50%);
-  box-shadow: -3px 3px 0 var(--coeduca-stroke);
-}
-
-/* Header del modal */
 .coeduca-login-header {
-  background: linear-gradient(135deg, var(--coeduca-primary) 0%, #FFA500 100%);
-  border-bottom: 4px solid var(--coeduca-stroke);
-  padding: 24px 24px 22px;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 28px 24px 24px;
   text-align: center;
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+  overflow: hidden;
+}
+.coeduca-login-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+  pointer-events: none;
 }
 .coeduca-login-header::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.14) 1.2px, transparent 0);
-  background-size: 14px 14px;
+  top: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.20) 0%, transparent 70%);
+  border-radius: 50%;
   pointer-events: none;
-  opacity: 0.7;
 }
 .coeduca-login-badge {
   display: inline-block;
-  background: var(--coeduca-stroke);
-  color: var(--coeduca-primary);
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 3px;
-  padding: 5px 16px;
+  padding: 6px 16px;
   border-radius: 50px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   text-transform: uppercase;
   position: relative;
   z-index: 2;
-  box-shadow: 2px 2px 0 var(--coeduca-accent);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 .coeduca-login-modal h2 {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   text-align: center;
-  text-transform: uppercase;
-  font-size: 34px;
-  font-weight: 900;
+  font-size: 30px;
+  font-weight: 800;
   color: #fff;
-  -webkit-text-stroke: 2px var(--coeduca-stroke);
-  text-stroke: 2px var(--coeduca-stroke);
-  text-shadow: 4px 4px 0 var(--coeduca-accent), 4px 4px 0 1px var(--coeduca-stroke);
-  letter-spacing: 2px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 2;
 }
@@ -527,15 +555,14 @@ body::after {
   text-align: center;
   font-size: 14px;
   margin: 0;
-  font-weight: bold;
-  color: var(--coeduca-stroke);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);
   position: relative;
   z-index: 2;
 }
 
-/* Cuerpo del modal */
 .coeduca-login-modal-scroll {
-  padding: 18px 24px 8px;
+  padding: 20px 24px 8px;
   position: relative;
   z-index: 1;
 }
@@ -545,99 +572,99 @@ body::after {
   animation: coeducaPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .coeduca-login-field-partner {
-  background: #FFF8E7;
-  border: 3px dashed var(--coeduca-stroke);
-  border-radius: 12px;
-  padding: 12px !important;
+  background: rgba(124, 92, 255, 0.06);
+  border: 1px dashed rgba(124, 92, 255, 0.3);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 14px !important;
   margin-bottom: 12px;
-  margin-left: 0;
-  margin-right: 0;
 }
 .coeduca-login-field label {
   display: flex;
   align-items: center;
-  font-size: 13px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 700;
   text-transform: uppercase;
-  margin-bottom: 6px;
-  color: var(--coeduca-stroke);
-  letter-spacing: 0.5px;
+  margin-bottom: 7px;
+  color: var(--coeduca-text-soft);
+  letter-spacing: 1px;
 }
 .coeduca-login-icon {
   display: inline-grid;
   place-items: center;
-  width: 26px; height: 26px;
-  background: var(--coeduca-accent);
-  color: var(--coeduca-surface);
-  border: 2px solid var(--coeduca-stroke);
+  width: 24px; height: 24px;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);
+  color: #fff;
   border-radius: 50%;
-  font-size: 13px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 700;
   margin-right: 8px;
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
   flex-shrink: 0;
-  box-shadow: 1px 1px 0 var(--coeduca-stroke);
+  box-shadow: 0 2px 6px rgba(124, 92, 255, 0.35);
 }
 .coeduca-login-remove {
   margin-left: auto;
-  background: var(--coeduca-error);
-  color: white;
-  border: 2px solid var(--coeduca-stroke);
+  background: rgba(230, 57, 70, 0.1);
+  color: var(--coeduca-error);
+  border: 1px solid rgba(230, 57, 70, 0.3);
   border-radius: 50%;
   width: 26px; height: 26px;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
   padding: 0;
   display: grid;
   place-items: center;
   line-height: 1;
-  box-shadow: 1px 1px 0 var(--coeduca-stroke);
-  transition: transform 0.12s;
+  transition: all 0.18s ease;
 }
-.coeduca-login-remove:hover { transform: scale(1.15) rotate(90deg); }
+.coeduca-login-remove:hover {
+  background: var(--coeduca-error);
+  color: #fff;
+  transform: scale(1.1);
+}
 
 .coeduca-login-field .coeduca-input {
   width: 100%;
-  font-size: 17px;
+  font-size: 16px;
   padding: 12px 14px;
-  border-radius: 12px;
-  letter-spacing: 1px;
+  border-radius: var(--coeduca-radius-sm);
+  letter-spacing: 0.5px;
 }
 .coeduca-login-info {
-  background: linear-gradient(135deg, #C8E6C9 0%, #E8F5E9 100%);
-  border: 3px solid var(--coeduca-success);
-  border-radius: 10px;
-  padding: 9px 13px;
+  background: rgba(56, 178, 106, 0.08);
+  border: 1px solid rgba(56, 178, 106, 0.35);
+  border-left: 3px solid var(--coeduca-success);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 10px 14px;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 500;
   margin-top: 8px;
   display: none;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
-  animation: coeducaPopIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: coeducaPopIn 0.3s ease;
+  color: var(--coeduca-text-soft);
 }
 .coeduca-login-info.show { display: block; }
 .coeduca-login-info b {
   color: var(--coeduca-success);
   font-size: 14px;
+  font-weight: 700;
 }
 .coeduca-login-info small {
   font-size: 11px;
-  color: var(--coeduca-stroke);
-  opacity: 0.75;
+  color: var(--coeduca-text-muted);
 }
 
 .coeduca-login-error {
-  background: linear-gradient(135deg, #FFCDD2 0%, #FFEBEE 100%);
-  border: 3px solid var(--coeduca-error);
-  border-radius: 10px;
-  padding: 9px 13px;
+  background: rgba(230, 57, 70, 0.06);
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-left: 3px solid var(--coeduca-error);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 10px 14px;
   font-size: 13px;
-  font-weight: bold;
+  font-weight: 500;
   margin-top: 8px;
   color: var(--coeduca-error);
   display: none;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
   animation: coeducaShake 0.3s;
 }
 .coeduca-login-error.show { display: block; }
@@ -650,10 +677,10 @@ body::after {
 .coeduca-login-actions {
   display: flex;
   gap: 10px;
-  padding: 14px 24px 18px;
+  padding: 16px 24px 20px;
   flex-wrap: wrap;
-  border-top: 3px dashed rgba(0,0,0,0.12);
-  background: var(--coeduca-surface);
+  border-top: 1px solid rgba(124, 92, 255, 0.12);
+  background: rgba(255, 255, 255, 0.5);
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -662,15 +689,15 @@ body::after {
   flex: 1;
   min-width: 130px;
   padding: 12px 14px;
-  font-size: 14px;
+  font-size: 13px;
 }
 .coeduca-login-actions .coeduca-btn:disabled {
   cursor: not-allowed;
+  opacity: 0.55;
 }
 
 @media (max-width: 480px) {
-  .coeduca-login-modal h2 { font-size: 26px; }
-  .coeduca-login-modal::before { width: 52px; height: 52px; top: -5px; right: -5px; }
+  .coeduca-login-modal h2 { font-size: 24px; }
   .coeduca-login-actions .coeduca-btn { min-width: 100%; }
 }
 
@@ -678,115 +705,121 @@ body::after {
 .coeduca-extra-badge {
   position: fixed;
   top: 14px; left: 14px;
-  background: linear-gradient(135deg, var(--coeduca-accent) 0%, #FF4081 100%);
-  color: var(--coeduca-surface);
-  border: 3px solid var(--coeduca-stroke);
+  background: linear-gradient(135deg, var(--coeduca-accent) 0%, var(--coeduca-accent-2) 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 50px;
   padding: 9px 16px;
-  font-size: 14px;
-  font-weight: 900;
-  box-shadow: var(--coeduca-shadow-sm);
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 22px rgba(255, 92, 138, 0.4);
   z-index: 100;
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  animation: coeducaBadgePulse 2.5s ease-in-out infinite;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: coeducaBadgePulse 2.6s ease-in-out infinite;
 }
 @keyframes coeducaBadgePulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
+  50% { transform: scale(1.04); }
 }
 
-/* ===== FINAL SCORE ===== */
+/* ===== FINAL SCORE (glass) ===== */
 .coeduca-final-score {
-  background:
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.2) 0 14px, transparent 14px 28px),
-    linear-gradient(135deg, var(--coeduca-primary) 0%, #FFC700 100%);
-  border: 6px solid var(--coeduca-stroke);
-  border-radius: var(--coeduca-radius);
-  padding: 26px;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.85) 0%, rgba(255, 92, 138, 0.80) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: var(--coeduca-radius-lg);
+  padding: 30px 26px;
   margin: 32px 0;
   text-align: center;
   box-shadow: var(--coeduca-shadow-lg);
   position: relative;
   overflow: hidden;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
 }
-.coeduca-final-score::before,
+.coeduca-final-score::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 100%);
+  pointer-events: none;
+  border-radius: var(--coeduca-radius-lg) var(--coeduca-radius-lg) 0 0;
+}
 .coeduca-final-score::after {
   content: '';
   position: absolute;
-  width: 80px;
-  height: 80px;
-  border: 4px solid var(--coeduca-stroke);
+  bottom: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(255,255,255,0.20) 0%, transparent 70%);
   border-radius: 50%;
-}
-.coeduca-final-score::before {
-  background: var(--coeduca-accent);
-  top: -20px; left: -20px;
-  opacity: 0.7;
-}
-.coeduca-final-score::after {
-  background: var(--coeduca-info);
-  bottom: -25px; right: -25px;
-  opacity: 0.7;
+  pointer-events: none;
 }
 .coeduca-final-score h2 {
-  margin: 0 0 10px;
-  font-size: 26px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   position: relative;
   z-index: 1;
-  text-shadow: 2px 2px 0 #fff;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.12);
 }
 .coeduca-final-score .score-number {
   font-size: 56px;
-  font-weight: 900;
-  color: var(--coeduca-accent);
-  text-shadow:
-    3px 3px 0 var(--coeduca-stroke),
-    -1px -1px 0 var(--coeduca-stroke),
-    1px -1px 0 var(--coeduca-stroke),
-    -1px 1px 0 var(--coeduca-stroke);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
   display: block;
   margin: 8px 0;
   position: relative;
   z-index: 1;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 .coeduca-final-score p {
   position: relative;
   z-index: 1;
-  font-weight: bold;
+  font-weight: 500;
   margin: 0;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 /* ===== FEEDBACK INLINE ===== */
 .coeduca-feedback {
   display: inline-block;
+  font-weight: 700;
+  font-size: 13px;
   margin-left: 8px;
-  font-size: 18px;
-  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 50px;
+  border: 1px solid transparent;
+  animation: coeducaFeedbackPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
   vertical-align: middle;
 }
-.coeduca-feedback.correct { color: var(--coeduca-success); }
-.coeduca-feedback.wrong { color: var(--coeduca-error); }
+.coeduca-feedback.correct {
+  background: rgba(56, 178, 106, 0.15);
+  color: var(--coeduca-success);
+  border-color: rgba(56, 178, 106, 0.4);
+}
+.coeduca-feedback.wrong {
+  background: rgba(230, 57, 70, 0.12);
+  color: var(--coeduca-error);
+  border-color: rgba(230, 57, 70, 0.4);
+}
+@keyframes coeducaFeedbackPop {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.18); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 /* ============================================================
-   WORDSEARCH — POP ART SUTIL (rediseñado)
-   - Quitamos el grueso fondo negro entre celdas
-   - Celdas con fondo crema cálido (no blanco puro)
-   - Separadores casi invisibles, papel pop-art
-   - Acentos rosados y dorados, animaciones más alegres
+   WORDSEARCH (sopa de letras) - estilo glass
    ============================================================ */
-
-/* Paleta privada del módulo (no toca el resto) */
 .ws-grid-wrap {
-  --ws-paper:        #FFF6E0;       /* fondo del tablero (crema pop) */
-  --ws-paper-deep:   #F4E9C8;       /* gap/separación entre celdas (sutil) */
-  --ws-cell:         #FFFBEC;       /* fondo de celda base */
-  --ws-cell-2:       #FFEFC2;       /* fondo de celda alterno (tablero suave) */
-  --ws-cell-ink:     #2A1E12;       /* tinta cálida (no negro puro) */
-  --ws-frame:        var(--coeduca-accent);
-  --ws-frame-shadow: var(--coeduca-stroke);
+  --ws-cell:      rgba(255, 255, 255, 0.85);
+  --ws-cell-2:    rgba(255, 255, 255, 0.75);
+  --ws-cell-ink:  var(--coeduca-text);
+  --ws-frame:     rgba(124, 92, 255, 0.35);
 
   display: flex;
   flex-wrap: wrap;
@@ -794,17 +827,13 @@ body::after {
   align-items: flex-start;
 }
 
-/* === Tablero === */
 .ws-grid {
   display: grid;
-  gap: 2px;                                /* antes 3 — más sutil */
-  background:
-    /* halftone muy tenue dentro del tablero */
-    radial-gradient(circle at 1px 1px, rgba(255,107,157,0.10) 1px, transparent 0) 0 0/14px 14px,
-    linear-gradient(135deg, var(--ws-paper) 0%, var(--ws-paper-deep) 100%);
-  border: 3px solid var(--ws-frame);       /* antes 4px negro — ahora rosa */
-  border-radius: 16px;
-  padding: 10px;
+  gap: 3px;
+  background: linear-gradient(135deg, rgba(124, 92, 255, 0.12) 0%, rgba(255, 92, 138, 0.10) 100%);
+  border: 1px solid var(--ws-frame);
+  border-radius: var(--coeduca-radius);
+  padding: 12px;
   user-select: none;
   -webkit-user-select: none;
   touch-action: none;
@@ -812,459 +841,254 @@ body::after {
   min-width: 0;
   width: 100%;
   max-width: 460px;
-  /* Sombra doble: una rosa interior + una negra externa más ligera */
-  box-shadow:
-    0 0 0 4px var(--coeduca-bg),
-    6px 6px 0 var(--ws-frame-shadow),
-    inset 0 0 0 1px rgba(255,255,255,0.6);
+  box-shadow: var(--coeduca-shadow-sm);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   position: relative;
   container-type: inline-size;
   animation: wsBoardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 @keyframes wsBoardIn {
-  0%   { opacity: 0; transform: scale(0.92) rotate(-1deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0); }
+  0%   { opacity: 0; transform: scale(0.94); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-/* Esquina decorativa pop art (estrella/burst) */
-.ws-grid::before {
-  content: '';
-  position: absolute;
-  top: -14px; left: -14px;
-  width: 28px; height: 28px;
-  background:
-    radial-gradient(circle at 30% 30%, #fff 0 22%, transparent 23%),
-    var(--coeduca-primary);
-  border: 2px solid var(--coeduca-stroke);
-  border-radius: 50%;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
-  z-index: 3;
-  pointer-events: none;
-}
-.ws-grid::after {
-  content: '';
-  position: absolute;
-  bottom: -10px; right: -10px;
-  width: 22px; height: 22px;
-  background: var(--coeduca-info);
-  border: 2px solid var(--coeduca-stroke);
-  border-radius: 50%;
-  box-shadow: 1px 1px 0 var(--coeduca-stroke);
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* === Celda === */
 .ws-cell {
-  /* Fondo tipo "papel" cálido — sutil pero con vida */
-  background:
-    linear-gradient(145deg, var(--ws-cell) 0%, var(--ws-cell-2) 100%);
+  background: var(--ws-cell);
   display: grid;
   place-items: center;
-  font-weight: 900;
+  font-weight: 700;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   color: var(--ws-cell-ink);
-  /* Borde finísimo en lugar de gap negro */
-  box-shadow: inset 0 0 0 1px rgba(42, 30, 18, 0.10);
+  border: 1px solid rgba(124, 92, 255, 0.10);
   transition:
-    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.18s,
-    box-shadow 0.18s,
-    color 0.18s;
+    transform 0.15s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease,
+    color 0.18s ease;
   text-transform: uppercase;
   position: relative;
   aspect-ratio: 1 / 1;
   min-width: 0;
   font-size: var(--ws-cell-font, clamp(9px, 3vw, 16px));
   line-height: 1;
-  /* Aparición escalonada (el JS aplica --i por celda; con fallback funciona igual) */
   animation: wsCellIn 0.45s ease both;
   animation-delay: calc(var(--i, 0) * 6ms);
 }
 @keyframes wsCellIn {
-  0%   { opacity: 0; transform: scale(0.4); }
+  0%   { opacity: 0; transform: scale(0.5); }
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* Tablero ajedrezado MUY sutil (celdas pares un pelín más cálidas) */
-.ws-cell:nth-child(odd) {
-  background: linear-gradient(145deg, #FFFBEC 0%, #FFE9B8 100%);
-}
-.ws-cell:nth-child(even) {
-  background: linear-gradient(145deg, #FFF4D6 0%, #FFE0A8 100%);
-}
-
-/* Hover: la celda "respira" ligeramente */
 @media (hover: hover) {
   .ws-cell:hover:not(.ws-found):not(.ws-active) {
-    transform: translateY(-1px) scale(1.04);
-    box-shadow:
-      inset 0 0 0 1px rgba(42, 30, 18, 0.15),
-      0 3px 0 rgba(255, 107, 157, 0.35);
+    transform: translateY(-1px) scale(1.03);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(124, 92, 255, 0.20);
     z-index: 2;
   }
 }
 
-/* Selección activa: gradiente dorado vibrante */
 .ws-cell.ws-active {
-  background: linear-gradient(135deg, var(--coeduca-primary) 0%, #FF9F1C 100%) !important;
-  color: var(--coeduca-stroke);
-  transform: scale(1.10);
-  box-shadow:
-    inset 0 0 0 2px var(--coeduca-stroke),
-    0 0 0 3px rgba(255,215,0,0.35),
-    0 4px 0 var(--coeduca-stroke);
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%) !important;
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(124, 92, 255, 0.45);
+  border-color: rgba(255, 255, 255, 0.4);
   z-index: 4;
-  animation: wsActivePulse 0.6s ease infinite alternate;
+  animation: wsActivePulse 0.7s ease infinite alternate;
 }
 @keyframes wsActivePulse {
   0%   { filter: brightness(1); }
   100% { filter: brightness(1.12); }
 }
 
-/* Encontrada: verde menta pop con burst */
 .ws-cell.ws-found {
-  background: linear-gradient(135deg, #B7F5D8 0%, #6FCF97 100%) !important;
-  color: var(--coeduca-stroke);
+  background: linear-gradient(135deg, var(--coeduca-success) 0%, var(--coeduca-cyan) 100%) !important;
+  color: #fff;
   animation: wsFoundPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow:
-    inset 0 0 0 2px var(--coeduca-success),
-    0 2px 0 rgba(76, 175, 80, 0.4);
+  box-shadow: 0 4px 14px rgba(56, 178, 106, 0.45);
+  border-color: rgba(255, 255, 255, 0.4);
   z-index: 3;
-}
-.ws-cell.ws-found::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 55%);
-  border-radius: inherit;
-  pointer-events: none;
-  animation: wsFoundShine 0.7s ease forwards;
 }
 @keyframes wsFoundPop {
   0%   { transform: scale(1); }
-  35%  { transform: scale(1.25) rotate(6deg); }
-  70%  { transform: scale(0.95) rotate(-3deg); }
-  100% { transform: scale(1) rotate(0); }
-}
-@keyframes wsFoundShine {
-  0%   { opacity: 0; transform: scale(0.4); }
-  60%  { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 0; transform: scale(1.4); }
+  35%  { transform: scale(1.18); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
 }
 
-/* === Lista lateral de palabras === */
 .ws-list {
   flex: 1 1 130px;
   min-width: 0;
-  background:
-    radial-gradient(circle at 1px 1px, rgba(255,107,157,0.08) 1px, transparent 0) 0 0/12px 12px,
-    linear-gradient(160deg, #FFFEF6 0%, #FFF3D6 100%);
-  border: 3px solid var(--coeduca-stroke);
-  border-radius: 14px;
-  padding: 14px 14px 12px;
+  background: var(--coeduca-glass-bg-2);
+  border: 1px solid var(--coeduca-glass-brd);
+  border-radius: var(--coeduca-radius);
+  padding: 14px;
   box-shadow: var(--coeduca-shadow-sm);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
 }
-.ws-list::before {
-  content: '';
-  position: absolute;
-  top: -22px; right: -22px;
-  width: 48px; height: 48px;
-  background: var(--coeduca-primary);
-  border: 2px solid var(--coeduca-stroke);
-  border-radius: 50%;
-  box-shadow: -2px 2px 0 var(--coeduca-stroke);
-  opacity: 0.85;
-  pointer-events: none;
-}
 .ws-list-title {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   text-transform: uppercase;
-  font-size: 13px;
-  font-weight: 900;
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 1.5px;
   text-align: center;
-  background: linear-gradient(135deg, var(--coeduca-accent) 0%, #FF8FB1 100%);
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);
   color: #fff;
-  border: 2px solid var(--coeduca-stroke);
-  border-radius: 8px;
-  padding: 5px 8px;
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
-  position: relative;
-  z-index: 1;
+  border-radius: var(--coeduca-radius-sm);
+  padding: 7px 10px;
+  box-shadow: 0 4px 10px rgba(124, 92, 255, 0.25);
 }
 .ws-list ul {
   list-style: none;
   padding: 0;
-  margin: 10px 0 0;
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
+  margin: 12px 0 0;
+  font-weight: 600;
 }
 .ws-list li {
-  padding: 6px 10px;
+  padding: 7px 10px;
   border-radius: 8px;
   margin-bottom: 4px;
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   font-size: 14px;
   transition: all 0.2s;
-  border: 2px dashed transparent;
-  background: rgba(255,255,255,0.4);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--coeduca-text-soft);
   position: relative;
 }
 .ws-list li::before {
-  content: '◇';
-  margin-right: 6px;
-  color: var(--coeduca-accent);
+  content: '\25C7';
+  margin-right: 8px;
+  color: var(--coeduca-primary);
   font-size: 11px;
   transition: all 0.3s;
 }
 .ws-list li.ws-li-found {
   text-decoration: line-through;
-  text-decoration-thickness: 2px;
   text-decoration-color: var(--coeduca-success);
   color: var(--coeduca-success);
-  background: linear-gradient(90deg, #E8F5E9 0%, #C8E6C9 100%);
-  border: 2px dashed var(--coeduca-success);
+  background: rgba(56, 178, 106, 0.10);
+  border-color: rgba(56, 178, 106, 0.3);
   animation: wsLiFound 0.5s ease;
 }
 .ws-list li.ws-li-found::before {
-  content: '✓';
+  content: '\2713';
   color: var(--coeduca-success);
-  font-weight: 900;
+  font-weight: 700;
 }
 @keyframes wsLiFound {
-  0%   { transform: translateX(0) scale(1); }
-  35%  { transform: translateX(8px) rotate(-3deg) scale(1.05); }
-  70%  { transform: translateX(-2px) rotate(1deg); }
-  100% { transform: translateX(0) scale(1); }
+  0%   { transform: translateX(0); }
+  35%  { transform: translateX(6px); }
+  100% { transform: translateX(0); }
 }
 .ws-progress {
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 700;
   text-align: center;
-  background: linear-gradient(90deg, var(--coeduca-stroke) 0%, #2d2d2d 100%);
-  color: var(--coeduca-primary);
+  background: linear-gradient(135deg, var(--coeduca-text) 0%, var(--coeduca-text-soft) 100%);
+  color: #fff;
   border-radius: 50px;
-  padding: 5px 12px;
-  letter-spacing: 1.5px;
-  border: 2px solid var(--coeduca-stroke);
-  box-shadow: inset 0 0 0 1px rgba(255,215,0,0.3);
-  position: relative;
-  z-index: 1;
+  padding: 6px 14px;
+  letter-spacing: 1px;
 }
 
-/* En pantallas estrechas: stack vertical y grid usa todo el ancho */
 @media (max-width: 600px) {
   .ws-grid-wrap { flex-direction: column; }
   .ws-grid { max-width: 100%; width: 100%; flex: none; }
   .ws-list { width: 100%; flex: none; }
 }
 
-/* ===== UTILITY ===== */
+/* ===== UTILIDADES ===== */
 .coeduca-hidden { display: none !important; }
 .coeduca-row { display: flex; flex-wrap: wrap; gap: 10px; }
 .coeduca-center { text-align: center; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
-  .coeduca-app { padding: 14px 10px 130px; }
-  .coeduca-exercise { padding: 16px 14px; }
-  .coeduca-extra-badge { font-size: 12px; padding: 6px 10px; top: 8px; left: 8px; }
-  .coeduca-header h1 { letter-spacing: 1px; }
+  .coeduca-app { padding: 16px 12px 130px; }
+  .coeduca-exercise { padding: 22px 16px 18px; }
+  .coeduca-extra-badge { font-size: 12px; padding: 7px 12px; top: 8px; left: 8px; }
   .coeduca-final-score .score-number { font-size: 42px; }
 }
 
-/* Animación para indicar que la zona es válida para soltar */
+/* Drop hover (drag & drop válido) */
 .coeduca-drop-hover {
-  background: #FFF59D !important; /* Amarillo brillante */
+  background: rgba(124, 92, 255, 0.15) !important;
   border-color: var(--coeduca-primary) !important;
-  transform: scale(1.05);
+  transform: scale(1.04);
   transition: all 0.15s ease;
-  box-shadow: 0 0 8px var(--coeduca-primary);
+  box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18);
 }
 
 /* ============================================================
-   MEJORAS POP ART "WOW" — adiciones globales
-   No tocan la lógica existente; solo enriquecen lo visual.
+   PANELES GLASS REUTILIZABLES (para cards inline en exercises.js)
    ============================================================ */
-
-/* --- Halftone de fondo respira (muy lento, casi imperceptible) --- */
-@keyframes coeducaHalftoneBreathe {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.78; }
+.coeduca-panel {
+  background: var(--coeduca-glass-bg-2);
+  border: 1px solid var(--coeduca-glass-brd);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 14px;
+  box-shadow: var(--coeduca-shadow-sm);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
-body::before {
-  animation: coeducaHalftoneBreathe 14s ease-in-out infinite;
+.coeduca-panel-soft {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px dashed rgba(124, 92, 255, 0.25);
+  border-radius: var(--coeduca-radius-sm);
+  padding: 12px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
-
-/* --- Rayos diagonales del header rotan muy despacio --- */
-@keyframes coeducaRaysSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-body::after {
-  animation: coeducaRaysSpin 90s linear infinite;
-  transform-origin: 50% 50%;
-}
-
-/* --- Tarjetas de ejercicio: tilt sutil + glow al hover --- */
-.coeduca-exercise {
-  transition:
-    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.35s ease;
-  will-change: transform;
-}
-@media (hover: hover) {
-  .coeduca-exercise:hover {
-    transform: translate(-2px, -3px) rotate(-0.25deg);
-    box-shadow:
-      7px 8px 0 var(--coeduca-stroke),
-      0 0 0 4px rgba(255, 215, 0, 0.18);
-  }
-}
-
-/* Halftone más visible al pasar sobre la tarjeta */
-.coeduca-exercise::before {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-@media (hover: hover) {
-  .coeduca-exercise:hover::before {
-    opacity: 0.75;
-    transform: scale(1.1) rotate(8deg);
-  }
-}
-
-/* --- Botones: brillo "shine" al pasar el mouse --- */
-.coeduca-btn {
-  overflow: hidden;
-}
-.coeduca-btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(
-    100deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.45) 50%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  pointer-events: none;
-  transition: left 0.55s ease;
-}
-@media (hover: hover) {
-  .coeduca-btn:hover::after { left: 130%; }
-}
-
-/* --- Título del ejercicio "ondula" muy sutil --- */
-@keyframes coeducaTitleWobble {
-  0%, 100% { transform: rotate(-1.5deg); }
-  50%      { transform: rotate(-2.5deg) translateY(-1px); }
-}
-.coeduca-exercise-title {
-  animation: coeducaTitleWobble 3.6s ease-in-out infinite;
-  transform-origin: left center;
-}
-
-/* --- Input con borde "marker" pulsante al focus --- */
-@keyframes coeducaFocusGlow {
-  0%, 100% { box-shadow: 3px 3px 0 var(--coeduca-stroke), 0 0 0 0 rgba(255, 107, 157, 0.0); }
-  50%      { box-shadow: 3px 3px 0 var(--coeduca-stroke), 0 0 0 5px rgba(255, 107, 157, 0.18); }
-}
-.coeduca-input:focus {
-  animation: coeducaFocusGlow 1.6s ease-in-out infinite;
-}
-
-/* --- Feedback (OK / X) con burst --- */
-.coeduca-feedback {
+.coeduca-chip {
   display: inline-block;
-  font-weight: 900;
-  font-size: 14px;
-  margin-left: 8px;
-  padding: 2px 8px;
+  background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-primary-2) 100%);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
-  border: 2px solid var(--coeduca-stroke);
-  text-shadow: 1px 1px 0 var(--coeduca-stroke);
-  animation: coeducaFeedbackPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 10px rgba(124, 92, 255, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.coeduca-feedback.correct {
-  background: var(--coeduca-success);
-  color: #fff;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+.coeduca-chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(124, 92, 255, 0.36);
 }
-.coeduca-feedback.wrong {
-  background: var(--coeduca-error);
-  color: #fff;
-  box-shadow: 2px 2px 0 var(--coeduca-stroke);
+.coeduca-chip-accent {
+  background: linear-gradient(135deg, var(--coeduca-accent) 0%, var(--coeduca-accent-2) 100%);
+  box-shadow: 0 4px 10px rgba(255, 92, 138, 0.32);
 }
-@keyframes coeducaFeedbackPop {
-  0%   { transform: scale(0) rotate(-180deg); opacity: 0; }
-  60%  { transform: scale(1.25) rotate(10deg); opacity: 1; }
-  100% { transform: scale(1) rotate(0); opacity: 1; }
-}
-
-/* --- Header h1: los caracteres "vibran" con un parpadeo de color al hover --- */
-@media (hover: hover) {
-  .coeduca-header:hover h1 {
-    animation: coeducaH1Shake 0.4s ease;
-  }
-}
-@keyframes coeducaH1Shake {
-  0%, 100% { transform: translate(0, 0); }
-  20%      { transform: translate(-2px, 1px); }
-  40%      { transform: translate(2px, -1px); }
-  60%      { transform: translate(-1px, 2px); }
-  80%      { transform: translate(1px, -2px); }
+.coeduca-chip-info {
+  background: linear-gradient(135deg, var(--coeduca-info) 0%, var(--coeduca-cyan) 100%);
+  box-shadow: 0 4px 10px rgba(79, 195, 247, 0.32);
 }
 
-/* --- Burst circle del header pulsa --- */
-@keyframes coeducaHeaderBurst {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  50%      { transform: scale(1.08) rotate(8deg); }
-}
-.coeduca-header::after {
-  animation: coeducaHeaderBurst 4s ease-in-out infinite;
-}
-
-/* --- Note: "!" en el círculo amarillo gira al hover --- */
-.coeduca-note::before {
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@media (hover: hover) {
-  .coeduca-note:hover::before {
-    transform: rotate(20deg) scale(1.15);
-  }
+/* Slot de drop genérico (caja vacía donde encaja un chip) */
+.coeduca-slot {
+  display: inline-block;
+  min-width: 90px;
+  min-height: 32px;
+  border: 1.5px dashed rgba(124, 92, 255, 0.4);
+  border-radius: 8px;
+  padding: 3px 10px;
+  margin: 0 4px;
+  background: rgba(255, 255, 255, 0.6);
+  vertical-align: middle;
 }
 
-/* --- Audio button rebote "alegre" --- */
-@keyframes coeducaAudioBounce {
-  0%, 100% { transform: scale(1); }
-  30%      { transform: scale(1.12) rotate(-3deg); }
-  60%      { transform: scale(0.96) rotate(2deg); }
-}
-.coeduca-audio-btn.coeduca-playing {
-  animation: coeducaAudioBounce 0.9s ease-in-out infinite;
-}
-
-/* --- Ben-day dots como "respiración" en exercise --- */
-@keyframes coeducaDotsBreathe {
-  0%, 100% { opacity: 0.45; }
-  50%      { opacity: 0.65; }
-}
-.coeduca-exercise::before {
-  animation: coeducaDotsBreathe 5s ease-in-out infinite;
-}
-
-/* --- Reduce motion: respeta al usuario --- */
+/* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

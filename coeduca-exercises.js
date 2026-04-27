@@ -283,7 +283,7 @@
       const gridRect = gridEl.getBoundingClientRect();
       const cx = rect.left + rect.width / 2 - gridRect.left;
       const cy = rect.top + rect.height / 2 - gridRect.top;
-      const colors = ['#FFD700', '#FF6B9D', '#4FC3F7', '#9B5DE5', '#FF9F1C', '#6FCF97'];
+      const colors = ['#7C5CFF', '#FF5C8A', '#4FD1C5', '#F6B93B', '#5B8DEF', '#FF9A8B'];
       const layer = document.createElement('div');
       layer.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:6;overflow:visible;';
       gridEl.appendChild(layer);
@@ -300,8 +300,8 @@
           position:absolute; left:${cx}px; top:${cy}px;
           width:${isStar ? 10 : 7}px; height:${isStar ? 10 : 7}px;
           background:${color};
-          border:1.5px solid #1a1a1a;
-          border-radius:${isStar ? '2px' : '50%'};
+          box-shadow: 0 0 8px ${color}80;
+          border-radius:${isStar ? '3px' : '50%'};
           transform: translate(-50%,-50%) rotate(0deg);
           transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.7s ease-out;
           opacity: 1;
@@ -443,11 +443,15 @@
       el.dataset.id = item.id;
       el.dataset.side = side;
       
-      const bgColor = side === 'L' ? '#E1F5FE' : '#FFF9C4';
+      const bgGrad = side === 'L'
+        ? 'linear-gradient(135deg, rgba(91,141,239,0.18) 0%, rgba(79,209,197,0.18) 100%)'
+        : 'linear-gradient(135deg, rgba(246,185,59,0.20) 0%, rgba(255,154,139,0.20) 100%)';
+      const brdColor = side === 'L' ? 'rgba(91,141,239,0.4)' : 'rgba(246,185,59,0.45)';
 
-      el.style.cssText = `background:${bgColor}; border:3px solid #1a1a1a; border-radius:10px;
-        padding:10px 20px; font-weight:bold; cursor:pointer; box-sizing: border-box;
-        text-align:center; box-shadow:2px 2px 0 #1a1a1a; transition:transform 0.15s, background 0.15s;
+      el.style.cssText = `background:${bgGrad}; border:1.5px solid ${brdColor}; border-radius:12px;
+        padding:10px 20px; font-weight:600; cursor:pointer; box-sizing: border-box;
+        color: var(--coeduca-text); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        text-align:center; box-shadow:0 4px 12px rgba(56,38,130,0.10); transition:transform 0.18s, box-shadow 0.18s;
         width:max-content; position:relative; z-index:2;`;
         
       return el;
@@ -479,8 +483,8 @@
       const d = `M ${p1.x},${p1.y} C ${p1.x + offset},${p1.y} ${p2.x - offset},${p2.y} ${p2.x},${p2.y}`;
       
       path.setAttribute('d', d);
-      path.setAttribute('stroke', color || '#1a1a1a');
-      path.setAttribute('stroke-width', '4');
+      path.setAttribute('stroke', color || '#7C5CFF');
+      path.setAttribute('stroke-width', '3');
       path.setAttribute('fill', 'none');
       path.setAttribute('stroke-linecap', 'round');
       
@@ -499,7 +503,7 @@
         // Y aquí
         const a = leftCol.querySelector(`[data-id="${con.leftId}"]`);
         const b = rightCol.querySelector(`[data-id="${con.rightId}"]`);
-        con.lineEl = drawLine(a, b, ctx.examMode ? '#1a1a1a' : (con.correct ? '#4CAF50' : '#E63946'));
+        con.lineEl = drawLine(a, b, ctx.examMode ? '#7C5CFF' : (con.correct ? '#38B26A' : '#E63946'));
       });
     }
 
@@ -577,8 +581,7 @@
 
     const wrap = document.createElement('div');
     wrap.innerHTML = `
-      <div id="db-bank-${ctx.exerciseId}" style="display:flex;flex-wrap:wrap;gap:8px;
-           padding:14px;background:#FFF8E7;border:3px dashed #1a1a1a;border-radius:12px;
+      <div id="db-bank-${ctx.exerciseId}" class="coeduca-panel-soft" style="display:flex;flex-wrap:wrap;gap:8px;
            margin-bottom:16px;min-height:50px;">
       </div>
       <div id="db-sentences-${ctx.exerciseId}"></div>
@@ -591,11 +594,9 @@
     function makeWord(w) {
       const el = document.createElement('div');
       el.textContent = w;
-      el.className = 'db-word';
+      el.className = 'db-word coeduca-chip coeduca-chip-accent';
       el.dataset.word = w;
-      el.style.cssText = `background:#FF6B9D;color:#fff;border:3px solid #1a1a1a;border-radius:8px;
-        padding:6px 12px;font-weight:900;cursor:grab;box-shadow:2px 2px 0 #1a1a1a;
-        text-shadow:1px 1px 0 #1a1a1a;user-select:none;-webkit-user-select:none;`;
+      el.style.cursor = 'grab';
       attachDrag(el);
       return el;
     }
@@ -603,11 +604,9 @@
 
     sentences.forEach((s, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:10px 0;font-size:16px;line-height:2;font-weight:bold;';
+      row.style.cssText = 'margin:10px 0;font-size:16px;line-height:2;font-weight:600;';
       const parts = s.text.split('___');
-      const slot = `<span class="db-slot" data-i="${i}" data-answer="${C.escapeHTML(s.answer)}"
-                    style="display:inline-block;min-width:80px;min-height:30px;border:3px dashed #1a1a1a;
-                    border-radius:6px;padding:2px 8px;margin:0 4px;background:#FFF;vertical-align:middle;"></span>`;
+      const slot = `<span class="db-slot coeduca-slot" data-i="${i}" data-answer="${C.escapeHTML(s.answer)}"></span>`;
       row.innerHTML = (i + 1) + '. ' + C.escapeHTML(parts[0]) + slot + C.escapeHTML(parts[1] || '');
       sentEl.appendChild(row);
     });
@@ -655,14 +654,14 @@
         if (w && C.normalize(w.textContent) === C.normalize(ans)) {
           correct++;
           if (!ctx.examMode) {
-            slot.style.borderColor = '#4CAF50';
-            slot.style.background = '#E8F5E9';
+            slot.style.borderColor = 'var(--coeduca-success)';
+            slot.style.background = 'rgba(56,178,106,0.12)';
           }
           details.push(ans + ': OK');
         } else {
           if (!ctx.examMode) {
-            slot.style.borderColor = w ? '#E63946' : '#1a1a1a';
-            slot.style.background = w ? '#FFEBEE' : '#FFF';
+            slot.style.borderColor = w ? 'var(--coeduca-error)' : 'rgba(124,92,255,0.4)';
+            slot.style.background = w ? 'rgba(230,57,70,0.10)' : 'rgba(255,255,255,0.6)';
           }
           details.push(ans + ': ' + (w ? w.textContent + ' (X)' : 'vacio'));
         }
@@ -699,10 +698,11 @@
 
     items.forEach((it, i) => {
       const rowWrap = document.createElement('div');
-      rowWrap.style.cssText = 'margin:14px 0;padding:12px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:10px;';
+      rowWrap.className = 'coeduca-panel';
+      rowWrap.style.cssText = 'margin:14px 0;';
 
       const header = document.createElement('div');
-      header.style.cssText = 'font-weight:bold;margin-bottom:12px;';
+      header.style.cssText = 'font-weight:700;margin-bottom:12px;color:var(--coeduca-text);';
       header.textContent = `${i + 1}. Ordena las palabras para formar la oración:`;
       rowWrap.appendChild(header);
 
@@ -710,9 +710,10 @@
       // como una pista clara y leíble (con icono y estilo distinto de las fichas).
       if (it.es) {
         const hint = document.createElement('div');
-        hint.style.cssText = 'margin:0 0 10px 0;padding:8px 12px;background:#FFF3CD;' +
-          'border:2px dashed #1a1a1a;border-radius:8px;font-style:italic;font-size:14px;' +
-          'color:#1a1a1a;';
+        hint.style.cssText = 'margin:0 0 10px 0;padding:8px 14px;background:rgba(246,185,59,0.12);' +
+          'border:1px solid rgba(246,185,59,0.4);border-left:3px solid var(--coeduca-amber);' +
+          'border-radius:8px;font-style:italic;font-size:14px;' +
+          'color:var(--coeduca-text-soft);';
         hint.innerHTML = '<b>Pista en español:</b> ' + C.escapeHTML(it.es);
         rowWrap.appendChild(hint);
       }
@@ -724,7 +725,7 @@
       // Caja 1: Banco (Origen)
       const sourceBox = document.createElement('div');
       sourceBox.className = 'ro-source';
-      sourceBox.style.cssText = 'flex:1 1 200px; display:flex; flex-wrap:wrap; align-content:flex-start; gap:6px; min-height:48px; padding:8px; background:#f0f0f0; border:2px dashed #1a1a1a; border-radius:8px;';
+      sourceBox.style.cssText = 'flex:1 1 200px; display:flex; flex-wrap:wrap; align-content:flex-start; gap:6px; min-height:48px; padding:10px; background:rgba(255,255,255,0.45); border:1.5px dashed rgba(124,92,255,0.3); border-radius:10px;';
 
       // Caja 2: Zona (Destino).
       // Usamos un placeholder CSS-only mediante `data-placeholder` + ::before
@@ -737,7 +738,7 @@
         ? '"' + it.es + '"  -  arma la oración en inglés aquí'
         : 'Suelta las palabras aquí';
       targetBox.dataset.placeholder = placeholderText;
-      targetBox.style.cssText = 'position:relative; flex:1 1 200px; display:flex; flex-wrap:wrap; align-content:flex-start; gap:6px; min-height:48px; padding:8px; background:#fff; border:2px solid #1a1a1a; border-radius:8px; box-shadow:inset 2px 2px 6px rgba(0,0,0,0.06);';
+      targetBox.style.cssText = 'position:relative; flex:1 1 200px; display:flex; flex-wrap:wrap; align-content:flex-start; gap:6px; min-height:48px; padding:10px; background:rgba(255,255,255,0.85); border:1.5px solid rgba(124,92,255,0.25); border-radius:10px; box-shadow:inset 0 2px 6px rgba(0,0,0,0.04);';
 
       flexContainer.appendChild(sourceBox);
       flexContainer.appendChild(targetBox);
@@ -760,10 +761,8 @@
         const chip = document.createElement('div');
         chip.textContent = w;
         chip.dataset.word = w;
-        chip.style.cssText = `background:#4FC3F7;color:#1a1a1a;border:2px solid #1a1a1a;
-          border-radius:6px;padding:6px 14px;font-weight:bold;cursor:grab;
-          box-shadow:2px 2px 0 #1a1a1a; user-select:none; transition: transform 0.1s;
-          position:relative; z-index:2;`;
+        chip.className = 'coeduca-chip coeduca-chip-info';
+        chip.style.cssText += 'cursor:grab; user-select:none; position:relative; z-index:2;';
 
         // Variables para detectar si fue arrastre o solo un clic rápido
         let pX = 0, pY = 0;
@@ -775,14 +774,14 @@
             pY = clientY;
           },
           onMove: ({ under }) => {
-            sourceBox.style.borderColor = '#1a1a1a';
-            targetBox.style.borderColor = '#1a1a1a';
+            sourceBox.style.borderColor = 'rgba(124,92,255,0.3)';
+            targetBox.style.borderColor = 'rgba(124,92,255,0.25)';
             const hoverBox = under && under.closest ? under.closest('.ro-source, .ro-target') : null;
-            if (hoverBox) hoverBox.style.borderColor = '#FFD700';
+            if (hoverBox) hoverBox.style.borderColor = 'var(--coeduca-primary)';
           },
           onDrop: ({ under, clientX, clientY }) => {
-            sourceBox.style.borderColor = '#1a1a1a';
-            targetBox.style.borderColor = '#1a1a1a';
+            sourceBox.style.borderColor = 'rgba(124,92,255,0.3)';
+            targetBox.style.borderColor = 'rgba(124,92,255,0.25)';
 
             // DETECTOR DE CLIC: Si movió menos de 5px, lo tomamos como un clic/tap
             if (Math.abs(clientX - pX) < 5 && Math.abs(clientY - pY) < 5) {
@@ -850,8 +849,8 @@
 
         if (ok) correct++;
         if (!ctx.examMode) {
-          targetBox.style.background = ok ? '#E8F5E9' : '#FFEBEE';
-          targetBox.style.borderColor = ok ? '#4CAF50' : '#E63946';
+          targetBox.style.background = ok ? 'rgba(56,178,106,0.10)' : 'rgba(230,57,70,0.08)';
+          targetBox.style.borderColor = ok ? 'var(--coeduca-success)' : 'var(--coeduca-error)';
         }
         details.push(it.original.join(' ') + ': ' + (ok ? 'OK' : (got.join(' ') || 'vacio')));
       });
@@ -886,14 +885,17 @@
     const wrap = document.createElement('div');
     items.forEach((it, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:12px 0;padding:12px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:10px;';
+      row.className = 'coeduca-panel';
+      row.style.cssText = 'margin:12px 0;';
       
       // Envolvemos las letras y el input en un div con flexbox
       row.innerHTML = `
-        <div style="font-weight:bold;margin-bottom:10px;">${i + 1}. ${C.escapeHTML(it.hint || 'Forma la palabra')}</div>
+        <div style="font-weight:700;margin-bottom:10px;color:var(--coeduca-text);">${i + 1}. ${C.escapeHTML(it.hint || 'Forma la palabra')}</div>
         <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px;">
-          <div style="font-family:monospace;font-size:22px;letter-spacing:6px;font-weight:900;
-               background:#fff;border:2px solid #1a1a1a;border-radius:6px;padding:6px 12px;">
+          <div style="font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:6px;font-weight:800;
+               background:linear-gradient(135deg, rgba(124,92,255,0.10) 0%, rgba(255,92,138,0.10) 100%);
+               border:1.5px solid rgba(124,92,255,0.25);border-radius:10px;padding:8px 14px;
+               color:var(--coeduca-primary);">
             ${it.shuffled}
           </div>
           <input type="text" class="coeduca-input rl-input" data-i="${i}" placeholder="Escribe la palabra"
@@ -948,40 +950,47 @@
       margin-top: 10px;
     `;
 
-    // Colores pastel alternados para las cards (Pop Art)
-    const cardColors = ['#E1F5FE', '#FFF9C4', '#FCE4EC', '#E8F5E9'];
+    // Gradientes suaves alternados para las cards (glass)
+    const cardGrads = [
+      'linear-gradient(135deg, rgba(91,141,239,0.16) 0%, rgba(79,209,197,0.18) 100%)',
+      'linear-gradient(135deg, rgba(246,185,59,0.18) 0%, rgba(255,154,139,0.18) 100%)',
+      'linear-gradient(135deg, rgba(255,92,138,0.16) 0%, rgba(124,92,255,0.16) 100%)',
+      'linear-gradient(135deg, rgba(56,178,106,0.16) 0%, rgba(79,209,197,0.18) 100%)'
+    ];
 
     items.forEach((it, i) => {
-      const bgColor = cardColors[i % cardColors.length];
+      const bgGrad = cardGrads[i % cardGrads.length];
       const card = document.createElement('div');
       
       card.style.cssText = `
         position: relative;
-        background: ${bgColor};
-        border: 3px solid #1a1a1a;
-        border-radius: 14px;
-        padding: 24px 16px 16px;
-        box-shadow: 4px 4px 0 #1a1a1a;
+        background: ${bgGrad};
+        border: 1px solid var(--coeduca-glass-brd);
+        border-radius: var(--coeduca-radius);
+        padding: 26px 18px 18px;
+        box-shadow: var(--coeduca-shadow-sm);
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        transition: transform 0.15s;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
       `;
 
       card.innerHTML = `
-        <div style="position: absolute; top: -14px; left: -14px; background: #FF6B9D; color: #fff; border: 3px solid #1a1a1a; border-radius: 50%; width: 36px; height: 36px; display: grid; place-items: center; font-weight: 900; font-size: 16px; box-shadow: 2px 2px 0 #1a1a1a; z-index: 2;">
+        <div style="position: absolute; top: -12px; left: -12px; background: linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%); color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; width: 34px; height: 34px; display: grid; place-items: center; font-weight: 700; font-size: 15px; box-shadow: 0 4px 12px rgba(124,92,255,0.4); z-index: 2;">
           ${i + 1}
         </div>
-        <div style="font-size: 56px; line-height: 1.2; margin-bottom: 14px; filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.15));">
+        <div style="font-size: 56px; line-height: 1.2; margin-bottom: 14px;">
           ${C.escapeHTML(it.emojis)}
         </div>
-        <div style="font-weight: 900; font-size: 13px; margin-bottom: 8px; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="font-weight: 700; font-size: 12px; margin-bottom: 10px; color: var(--coeduca-text-soft); text-transform: uppercase; letter-spacing: 1px;">
           Escribe una oración
         </div>
         <input type="text" class="coeduca-input ep-input" data-i="${i}"
                style="width: 100%; text-align: center; font-size: 16px;" autocomplete="off" placeholder="Tu oración en inglés">
-        <div class="ep-fb" data-i="${i}" style="margin-top: 8px; font-size: 14px; font-weight: 900; min-height: 20px;"></div>
+        <div class="ep-fb" data-i="${i}" style="margin-top: 8px; font-size: 13px; font-weight: 700; min-height: 20px;"></div>
       `;
       grid.appendChild(card);
     });
@@ -1039,21 +1048,24 @@
     
     items.forEach((it, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:14px 0;padding:16px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:12px;';
+      row.className = 'coeduca-panel';
+      row.style.cssText = 'margin:14px 0;';
       
       // Creamos las opciones con una clase específica para poder manipularlas luego
       let optsHTML = it.options.map((opt, j) => `
-        <label class="mc-lbl-${ctx.exerciseId}-${i}" style="display:flex; align-items:center; background:#fff; 
-               border:2px solid #1a1a1a; border-radius:8px; padding:10px 14px; margin:8px 0; 
-               font-weight:bold; cursor:pointer; box-shadow:2px 2px 0 #1a1a1a; 
-               transition: background 0.15s, transform 0.1s, box-shadow 0.1s;">
+        <label class="mc-lbl-${ctx.exerciseId}-${i}" style="display:flex; align-items:center; background:rgba(255,255,255,0.7); 
+               border:1.5px solid rgba(124,92,255,0.20); border-radius:12px; padding:11px 14px; margin:8px 0; 
+               font-weight:600; cursor:pointer; box-shadow:0 2px 8px rgba(56,38,130,0.06); 
+               color:var(--coeduca-text);
+               backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+               transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;">
           <input type="radio" name="mc-${ctx.exerciseId}-${i}" value="${j}" 
-                 style="margin-right:12px; cursor:pointer; transform: scale(1.3);">
+                 style="margin-right:12px; cursor:pointer; transform: scale(1.2); accent-color: var(--coeduca-primary);">
           <span style="flex:1;">${C.escapeHTML(opt)}</span>
         </label>
       `).join('');
       
-      row.innerHTML = `<div style="font-weight:900; margin-bottom:12px; font-size:16px;">${i + 1}. ${C.escapeHTML(it.q)}</div>${optsHTML}`;
+      row.innerHTML = `<div style="font-weight:700; margin-bottom:12px; font-size:16px; color:var(--coeduca-text);">${i + 1}. ${C.escapeHTML(it.q)}</div>${optsHTML}`;
       wrap.appendChild(row);
 
       // --- MEJORA 1: Interactividad al seleccionar ---
@@ -1064,16 +1076,18 @@
         inp.addEventListener('change', () => {
           // Resetear todas las etiquetas de esta pregunta
           labels.forEach(l => {
-            l.style.background = '#fff';
+            l.style.background = 'rgba(255,255,255,0.7)';
             l.style.transform = 'translate(0, 0)';
-            l.style.boxShadow = '2px 2px 0 #1a1a1a';
+            l.style.boxShadow = '0 2px 8px rgba(56,38,130,0.06)';
+            l.style.borderColor = 'rgba(124,92,255,0.20)';
           });
-          // Iluminar la seleccionada (Estilo Pop Art: Amarillo)
+          // Iluminar la seleccionada (glass)
           if (inp.checked) {
             const activeLabel = inp.closest('label');
-            activeLabel.style.background = '#FFD700'; 
-            activeLabel.style.transform = 'translate(-2px, -2px)';
-            activeLabel.style.boxShadow = '4px 4px 0 #1a1a1a';
+            activeLabel.style.background = 'linear-gradient(135deg, rgba(124,92,255,0.14) 0%, rgba(255,92,138,0.12) 100%)';
+            activeLabel.style.transform = 'translateY(-1px)';
+            activeLabel.style.boxShadow = '0 6px 16px rgba(124,92,255,0.22)';
+            activeLabel.style.borderColor = 'var(--coeduca-primary)';
             
             if (!ctx.examMode) {
               if (+inp.value === it.answer) ctx.cheer(); 
@@ -1108,17 +1122,17 @@
             const lbl = r.closest('label');
             lbl.style.cursor = 'default';
             lbl.style.transform = 'translate(0, 0)';
-            lbl.style.boxShadow = '2px 2px 0 #1a1a1a';
+            lbl.style.boxShadow = '0 2px 8px rgba(56,38,130,0.06)';
             
             if (+r.value === it.answer) {
-              lbl.style.background = '#A8E6CF'; 
-              lbl.style.borderColor = '#4CAF50';
+              lbl.style.background = 'rgba(56,178,106,0.15)'; 
+              lbl.style.borderColor = 'var(--coeduca-success)';
             } else if (r.checked) {
-              lbl.style.background = '#FFCDD2';
-              lbl.style.borderColor = '#E63946';
+              lbl.style.background = 'rgba(230,57,70,0.10)';
+              lbl.style.borderColor = 'var(--coeduca-error)';
             } else {
-              lbl.style.background = '#f5f5f5';
-              lbl.style.opacity = '0.6';
+              lbl.style.background = 'rgba(255,255,255,0.4)';
+              lbl.style.opacity = '0.55';
             }
           });
         }
@@ -1147,25 +1161,26 @@
     const wrap = document.createElement('div');
     items.forEach((it, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:14px 0;padding:16px 20px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:12px;';
+      row.className = 'coeduca-panel';
+      row.style.cssText = 'margin:14px 0;';
       
       const wordSpans = it.words.map((w, j) => `
         <span class="se-word se-word-${ctx.exerciseId}-${i}" data-i="${i}" data-j="${j}"
-              style="display:inline-block; background:#fff; border:3px solid #1a1a1a;
-                     border-radius:8px; padding:6px 12px; margin:4px 3px; font-weight:900; font-size:17px; cursor:pointer;
-                     box-shadow:3px 3px 0 #1a1a1a; transition:transform 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
-                     position:relative;">
+              style="display:inline-block; background:rgba(255,255,255,0.9); border:1.5px solid rgba(124,92,255,0.20);
+                     border-radius:10px; padding:6px 14px; margin:4px 3px; font-weight:700; font-size:17px; cursor:pointer;
+                     box-shadow:0 3px 10px rgba(56,38,130,0.08); transition:transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+                     color:var(--coeduca-text); position:relative;">
           ${C.escapeHTML(w)}
         </span>
       `).join('');
       
       // Envolvemos la oración en su propia cajita centrada para separarla del texto
       row.innerHTML = `
-        <div style="font-weight:900; font-size:16px; margin-bottom:4px; color:var(--coeduca-text);">
+        <div style="font-weight:700; font-size:16px; margin-bottom:4px; color:var(--coeduca-text);">
           ${i + 1}. Toca la palabra incorrecta:
         </div>
-        <div style="line-height:2.8; margin-top:16px; text-align:center; background:rgba(255,255,255,0.6); 
-                    padding:12px 10px; border-radius:10px; border:2px dashed rgba(0,0,0,0.15);">
+        <div style="line-height:2.8; margin-top:16px; text-align:center; background:rgba(255,255,255,0.45); 
+                    padding:14px 12px; border-radius:12px; border:1px dashed rgba(124,92,255,0.20);">
           ${wordSpans}
         </div>`;
       wrap.appendChild(row);
@@ -1179,14 +1194,16 @@
       const i = +w.dataset.i;
       
       wrap.querySelectorAll(`.se-word-${ctx.exerciseId}-${i}`).forEach(s => {
-        s.style.background = '#fff';
+        s.style.background = 'rgba(255,255,255,0.9)';
         s.style.transform = 'translate(0, 0)';
-        s.style.boxShadow = '3px 3px 0 #1a1a1a';
+        s.style.boxShadow = '0 3px 10px rgba(56,38,130,0.08)';
+        s.style.borderColor = 'rgba(124,92,255,0.20)';
       });
       
-      w.style.background = '#FFD700';
-      w.style.transform = 'translate(-2px, -2px)';
-      w.style.boxShadow = '5px 5px 0 #1a1a1a';
+      w.style.background = 'linear-gradient(135deg, rgba(124,92,255,0.18) 0%, rgba(255,92,138,0.16) 100%)';
+      w.style.transform = 'translateY(-2px)';
+      w.style.boxShadow = '0 6px 16px rgba(124,92,255,0.28)';
+      w.style.borderColor = 'var(--coeduca-primary)';
       selected[i] = +w.dataset.j;
       
       if (!ctx.examMode) {
@@ -1220,22 +1237,22 @@
             const j = +w.dataset.j;
           
             if (j === it.errorIndex) {
-              // Palabra correcta a corregir (Verde)
-              w.style.background = '#A8E6CF';
-              w.style.borderColor = '#4CAF50';
-              w.style.color = '#1a1a1a';
-              w.style.boxShadow = '2px 2px 0 #1a1a1a';
+              // Palabra correcta a corregir (verde)
+              w.style.background = 'rgba(56,178,106,0.18)';
+              w.style.borderColor = 'var(--coeduca-success)';
+              w.style.color = 'var(--coeduca-text)';
+              w.style.boxShadow = '0 4px 12px rgba(56,178,106,0.25)';
             
               if (it.fix) {
                 const fixBadge = document.createElement('div');
-                // Diseño de burbuja de cómic con el piquito apuntando abajo
+                // Bocadillo moderno con la corrección
                 fixBadge.innerHTML = `
-                  <div style="background:#1a1a1a; color:#fff; font-size:14px; padding:5px 12px; border-radius:8px; 
-                              font-weight:900; letter-spacing:1px; box-shadow:3px 3px 0 var(--coeduca-accent);">
+                  <div style="background:linear-gradient(135deg, var(--coeduca-success) 0%, var(--coeduca-cyan) 100%); color:#fff; font-size:13px; padding:6px 14px; border-radius:50px; 
+                              font-weight:700; letter-spacing:0.5px; box-shadow:0 4px 12px rgba(56,178,106,0.35);">
                     ${C.escapeHTML(it.fix)}
                   </div>
                   <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; 
-                              border-top:8px solid #1a1a1a; margin: 0 auto;"></div>
+                              border-top:8px solid var(--coeduca-success); margin: 0 auto;"></div>
                 `;
                 fixBadge.style.cssText = `position:absolute; bottom:110%; left:50%; transform:translateX(-50%); 
                                           display:flex; flex-direction:column; align-items:center; z-index:10; 
@@ -1243,15 +1260,15 @@
                 w.appendChild(fixBadge);
               }
             } else if (j === selected[i]) {
-              // Error del estudiante (Rojo)
-              w.style.background = '#FFCDD2';
-              w.style.borderColor = '#E63946';
-              w.style.boxShadow = '2px 2px 0 #1a1a1a';
+              // Error del estudiante (rojo)
+              w.style.background = 'rgba(230,57,70,0.14)';
+              w.style.borderColor = 'var(--coeduca-error)';
+              w.style.boxShadow = '0 4px 12px rgba(230,57,70,0.20)';
             } else {
-              // Palabras neutras (Gris sin sombra para no llamar la atención)
-              w.style.background = '#f5f5f5';
-              w.style.borderColor = '#ccc';
-              w.style.color = '#999';
+              // Palabras neutras (gris sin sombra)
+              w.style.background = 'rgba(255,255,255,0.4)';
+              w.style.borderColor = 'rgba(0,0,0,0.08)';
+              w.style.color = 'var(--coeduca-text-muted)';
               w.style.boxShadow = 'none';
             }
           });
@@ -1280,15 +1297,14 @@
 
     const wrap = document.createElement('div');
     wrap.innerHTML = `
-      <div id="cat-bank-${ctx.exerciseId}" style="display:flex;flex-wrap:wrap;gap:6px;
-           padding:10px;background:#FFF8E7;border:3px dashed #1a1a1a;border-radius:10px;
+      <div id="cat-bank-${ctx.exerciseId}" class="coeduca-panel-soft" style="display:flex;flex-wrap:wrap;gap:6px;
            margin-bottom:14px;min-height:50px;"></div>
       <div style="display:grid;grid-template-columns:repeat(${cats.length},1fr);gap:10px;">
         ${cats.map((c, i) => `
-          <div class="cat-col" data-cat="${i}" style="background:#fff;border:3px solid #1a1a1a;
-               border-radius:10px;padding:10px;min-height:120px;">
-            <h4 style="margin:0 0 8px;text-align:center;background:#FFD700;border:2px solid #1a1a1a;
-                border-radius:6px;padding:4px;text-transform:uppercase;font-size:13px;">
+          <div class="cat-col coeduca-panel" data-cat="${i}" style="padding:12px;min-height:130px;">
+            <h4 style="margin:0 0 10px;text-align:center;background:linear-gradient(135deg, var(--coeduca-primary) 0%, var(--coeduca-accent) 100%);color:#fff;border:1px solid rgba(255,255,255,0.3);
+                border-radius:50px;padding:6px 10px;text-transform:uppercase;font-size:12px;letter-spacing:1px;font-weight:700;
+                box-shadow:0 4px 10px rgba(124,92,255,0.25);">
               ${C.escapeHTML(c)}
             </h4>
             <div class="cat-drop" data-cat="${i}" style="min-height:80px;"></div>
@@ -1304,9 +1320,8 @@
       chip.textContent = it.text;
       chip.dataset.cat = it.cat;
       chip.dataset.idx = idx;
-      chip.style.cssText = `background:#FF6B9D;color:#fff;border:2px solid #1a1a1a;
-        border-radius:6px;padding:5px 10px;font-weight:bold;cursor:grab;
-        box-shadow:1px 1px 0 #1a1a1a;text-shadow:1px 1px 0 #1a1a1a;`;
+      chip.className = 'coeduca-chip coeduca-chip-accent';
+      chip.style.cssText += 'cursor:grab; user-select:none;';
       bank.appendChild(chip);
       C.makeDraggable(chip, {
         onDrop: ({ under }) => {
@@ -1354,7 +1369,8 @@
     const wrap = document.createElement('div');
     items.forEach((it, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:10px 0;padding:12px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:10px;font-size:16px;';
+      row.className = 'coeduca-panel';
+      row.style.cssText = 'margin:10px 0;font-size:16px;font-weight:500;color:var(--coeduca-text);';
       const opts = it.options.map((o, j) =>
         `<option value="${j}">${C.escapeHTML(o)}</option>`).join('');
       row.innerHTML = `${i + 1}. ${C.escapeHTML(it.before || '')}
@@ -1405,21 +1421,18 @@
 
     const wrap = document.createElement('div');
     wrap.innerHTML = `
-      <div id="mi-bank-${ctx.exerciseId}" style="display:flex;flex-wrap:wrap;gap:8px;
-           padding:10px;background:#FFF8E7;border:3px dashed #1a1a1a;border-radius:10px;
+      <div id="mi-bank-${ctx.exerciseId}" class="coeduca-panel-soft" style="display:flex;flex-wrap:wrap;gap:8px;
            margin-bottom:14px;"></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;">
         ${pairs.map(p => `
-          <div class="mi-target" data-idx="${p.idx}"
-               style="background:#fff;border:3px solid #1a1a1a;border-radius:10px;
-                      padding:8px;text-align:center;min-height:100px;display:flex;
-                      flex-direction:column;align-items:center;justify-content:center;
-                      box-shadow:2px 2px 0 #1a1a1a;">
+          <div class="mi-target coeduca-panel" data-idx="${p.idx}"
+               style="padding:10px;text-align:center;min-height:110px;display:flex;
+                      flex-direction:column;align-items:center;justify-content:center;">
             ${p.image
-              ? `<img src="${C.escapeHTML(p.image)}" style="max-width:80px;max-height:80px;border:2px solid #1a1a1a;border-radius:6px;">`
+              ? `<img src="${C.escapeHTML(p.image)}" style="max-width:80px;max-height:80px;border:1px solid rgba(0,0,0,0.08);border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.08);">`
               : `<div style="font-size:46px;">${C.escapeHTML(p.emoji || '?')}</div>`}
-            <div class="mi-slot" style="margin-top:6px;min-height:28px;width:100%;
-                 border:2px dashed #1a1a1a;border-radius:6px;padding:2px;"></div>
+            <div class="mi-slot" style="margin-top:8px;min-height:30px;width:100%;
+                 border:1.5px dashed rgba(124,92,255,0.35);border-radius:8px;padding:3px;background:rgba(255,255,255,0.5);"></div>
           </div>
         `).join('')}
       </div>
@@ -1431,8 +1444,8 @@
       const chip = document.createElement('div');
       chip.textContent = p.word;
       chip.dataset.idx = p.idx;
-      chip.style.cssText = `background:#4FC3F7;border:2px solid #1a1a1a;border-radius:6px;
-        padding:5px 10px;font-weight:bold;cursor:grab;box-shadow:1px 1px 0 #1a1a1a;`;
+      chip.className = 'coeduca-chip coeduca-chip-info';
+      chip.style.cssText += 'cursor:grab; user-select:none;';
       bank.appendChild(chip);
       C.makeDraggable(chip, {
         // --- AGREGA ESTO ---
@@ -1558,14 +1571,15 @@
     const wrap = document.createElement('div');
     items.forEach((it, i) => {
       const row = document.createElement('div');
-      row.style.cssText = 'margin:10px 0;padding:12px;background:#FFF8E7;border:3px solid #1a1a1a;border-radius:10px;';
+      row.className = 'coeduca-panel';
+      row.style.cssText = 'margin:10px 0;';
       row.innerHTML = `
-        <div style="font-weight:bold;margin-bottom:8px;">${i + 1}. ${C.escapeHTML(it.statement)}</div>
+        <div style="font-weight:600;margin-bottom:10px;color:var(--coeduca-text);">${i + 1}. ${C.escapeHTML(it.statement)}</div>
         <div style="display:flex;gap:10px;">
-          <button class="coeduca-btn tf-btn" data-i="${i}" data-v="true"
-                  style="background:#4CAF50;color:#fff;flex:1;">TRUE</button>
-          <button class="coeduca-btn tf-btn" data-i="${i}" data-v="false"
-                  style="background:#E63946;color:#fff;flex:1;">FALSE</button>
+          <button class="coeduca-btn coeduca-btn-success tf-btn" data-i="${i}" data-v="true"
+                  style="flex:1;">TRUE</button>
+          <button class="coeduca-btn coeduca-btn-accent tf-btn" data-i="${i}" data-v="false"
+                  style="flex:1;">FALSE</button>
         </div>
       `;
       wrap.appendChild(row);
@@ -1576,7 +1590,8 @@
       const i = +b.dataset.i;
       selections[i] = b.dataset.v === 'true';
       wrap.querySelectorAll(`.tf-btn[data-i="${i}"]`).forEach(btn => {
-        btn.style.outline = btn === b ? '4px solid #FFD700' : 'none';
+        btn.style.outline = btn === b ? '3px solid var(--coeduca-primary)' : 'none';
+        btn.style.outlineOffset = btn === b ? '2px' : '0';
       });
       
       if (!ctx.examMode) {

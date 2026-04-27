@@ -1180,6 +1180,65 @@
   }
 
   // =====================================================================
+  // 9.5 HELPERS DE CÓDIGO DE REFERENCIA (PDF)
+  // =====================================================================
+  // Convierte un número (1-3999) a numerales romanos.
+  function toRoman(num) {
+    if (num === null || num === undefined || isNaN(num)) return 'N';
+    const n = Math.max(0, Math.floor(num));
+    if (n === 0) return 'N';
+    const map = [
+      [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
+      [100,  'C'], [90,  'XC'], [50,  'L'], [40,  'XL'],
+      [10,   'X'], [9,   'IX'], [5,   'V'], [4,   'IV'],
+      [1,    'I']
+    ];
+    let result = '';
+    let remaining = n;
+    for (const [val, sym] of map) {
+      while (remaining >= val) {
+        result += sym;
+        remaining -= val;
+      }
+    }
+    return result;
+  }
+
+  // Convierte una nota tipo "8.9" en "VIII-IX" (parte entera y primer decimal).
+  // "10.0" -> "X-N", "0.0" -> "N-N", "7.5" -> "VII-V"
+  function gradeToRoman(gradeStr) {
+    const s = String(gradeStr || '0.0');
+    const parts = s.split('.');
+    const intPart = parseInt(parts[0], 10) || 0;
+    const decPart = parseInt((parts[1] || '0')[0], 10) || 0;
+    return toRoman(intPart) + '-' + (decPart === 0 ? 'N' : toRoman(decPart));
+  }
+
+  // Hash determinista corto (4 chars en base36) a partir de un string.
+  // Sirve como identificador "neutro" que mezclamos con la nota en romanos
+  // para que el código del pie de página parezca un simple número de orden.
+  function shortHash4(str) {
+    let h = 5381;
+    const s = String(str || '');
+    for (let i = 0; i < s.length; i++) {
+      h = ((h << 5) + h) + s.charCodeAt(i);
+      h = h & 0xffffffff;
+    }
+    const u = (h >>> 0).toString(36).toUpperCase();
+    return ('0000' + u).slice(-4);
+  }
+
+  // Devuelve el código de referencia que va al pie de cada página del PDF.
+  // Formato: "Ref. <ROMANOS>-<YYYY>-<HASH4>"
+  // Solo el profesor sabe que el primer bloque codifica la nota.
+  function buildReferenceCode(grade, nie, topic) {
+    const romans = gradeToRoman(grade);
+    const year = new Date().getFullYear();
+    const hash = shortHash4((nie || '') + '|' + (topic || '') + '|' + year);
+    return 'Ref. ' + romans + '-' + year + '-' + hash;
+  }
+
+  // =====================================================================
   // 10. PDF GENERATION (Multi-Diseño con fix iOS)
   // =====================================================================
   function generatePDF() {
@@ -1191,7 +1250,10 @@
     const doc = new jsPDF({ unit: 'mm', format: 'letter' });
 
     const cfg = state.config;
-    const design = cfg.pdfDesign || 'PopArt';
+    // El default ahora es 'Modern' (glassmorphism). Si el config dice 'PopArt'
+    // (legado), también lo mapeamos a 'Modern' para coherencia visual.
+    let design = cfg.pdfDesign || 'Modern';
+    if (design === 'PopArt' || design === 'PopArtVibrant') design = 'Modern';
 
     const stu = state.student || { nie: '-', name: '-', grade: '-' };
     const partners = (state.partners && state.partners.length)
@@ -1214,64 +1276,78 @@
     //   font
     // ----------------------------------------------------------------
     const themes = {
-      'PopArt': {
-        primary:   [255, 215, 0],
-        accent:    [255, 107, 157],
-        dark:      [26,  26,  26],
-        onPrimary: [26,  26,  26],
-        onAccent:  [255, 255, 255],
-        bg:        [255, 248, 231],
-        divider:   [200, 190, 170],
-        useStrokes: true,
-        font: 'helvetica'
-      },
-      'PopArtVibrant': {
-        primary:   [30,  30,  30],
-        accent:    [0,   220, 150],
-        dark:      [10,  10,  10],
-        onPrimary: [0,   220, 150],
-        onAccent:  [10,  10,  10],
-        bg:        [245, 245, 245],
-        divider:   [180, 180, 180],
-        useStrokes: true,
-        font: 'helvetica'
+      // Tema principal - glassmorphism amigable a PDF: violeta + rosa + sin sombras hard
+      'Modern': {
+        primary:    [124, 92, 255],   // violeta
+        primary2:   [91,  141, 239],  // azul-violeta
+        accent:     [255, 92,  138],  // rosa
+        accent2:    [255, 154, 139],  // coral
+        dark:       [31,  34,  64],   // texto principal
+        textSoft:   [75,  79,  115],  // texto secundario
+        textMuted:  [122, 127, 156],  // texto tenue
+        onPrimary:  [255, 255, 255],
+        onAccent:   [255, 255, 255],
+        bg:         [252, 250, 255],  // fondo de tarjeta
+        bgSoft:     [244, 241, 255],  // fondo aún más suave
+        divider:    [220, 215, 240],
+        useStrokes: false,
+        font:       'helvetica'
       },
       'Colorido': {
-        primary:   [255, 87,  34],
-        accent:    [33,  150, 243],
-        dark:      [26,  26,  26],
-        onPrimary: [255, 255, 255],
-        onAccent:  [255, 255, 255],
-        bg:        [255, 255, 255],
-        divider:   [220, 200, 190],
+        primary:    [255, 87,  34],
+        primary2:   [255, 152, 0],
+        accent:     [33,  150, 243],
+        accent2:    [3,   169, 244],
+        dark:       [26,  26,  26],
+        textSoft:   [70,  70,  70],
+        textMuted:  [130, 130, 130],
+        onPrimary:  [255, 255, 255],
+        onAccent:   [255, 255, 255],
+        bg:         [255, 255, 255],
+        bgSoft:     [250, 245, 235],
+        divider:    [220, 200, 190],
         useStrokes: false,
-        font: 'helvetica'
+        font:       'helvetica'
       },
       'Pastel': {
-        primary:   [179, 229, 252],
-        accent:    [248, 187, 208],
-        dark:      [50,  50,  80],
-        onPrimary: [50,  50,  80],
-        onAccent:  [80,  40,  60],
-        bg:        [255, 255, 255],
-        divider:   [210, 210, 230],
+        primary:    [179, 229, 252],
+        primary2:   [144, 202, 249],
+        accent:     [248, 187, 208],
+        accent2:    [244, 143, 177],
+        dark:       [50,  50,  80],
+        textSoft:   [80,  80,  110],
+        textMuted:  [140, 140, 165],
+        onPrimary:  [50,  50,  80],
+        onAccent:   [80,  40,  60],
+        bg:         [255, 255, 255],
+        bgSoft:     [248, 247, 252],
+        divider:    [210, 210, 230],
         useStrokes: false,
-        font: 'helvetica'
+        font:       'helvetica'
       },
       'HollyHobbie': {
-        primary:   [143, 151, 121],
-        accent:    [212, 165, 165],
-        dark:      [60,  40,  20],
-        onPrimary: [255, 255, 255],
-        onAccent:  [60,  40,  20],
-        bg:        [245, 245, 220],
-        divider:   [180, 160, 130],
-        useStrokes: true,
-        font: 'times'
+        primary:    [143, 151, 121],
+        primary2:   [165, 173, 145],
+        accent:     [212, 165, 165],
+        accent2:    [222, 184, 184],
+        dark:       [60,  40,  20],
+        textSoft:   [90,  70,  50],
+        textMuted:  [140, 120, 100],
+        onPrimary:  [255, 255, 255],
+        onAccent:   [60,  40,  20],
+        bg:         [245, 245, 220],
+        bgSoft:     [250, 250, 235],
+        divider:    [180, 160, 130],
+        useStrokes: false,
+        font:       'times'
       }
     };
 
-    const T = themes[design] || themes['PopArt'];
+    // Merge con defaults: si el tema elegido no define bgSoft/textSoft/textMuted/primary2/accent2,
+    // los rellenamos con los valores de 'Modern' como fallback. El tema elegido SIEMPRE gana
+    // donde haya valor propio (Object.assign sobre-escribe en orden de derecha a izquierda).
+    const baseTheme = themes[design] || themes['Modern'];
+    const T = Object.assign({}, themes['Modern'], baseTheme);
 
     // Colores semanticos fijos
     const S = {
@@ -1353,61 +1429,29 @@
     let y = headerH + 14;
 
     // ----------------------------------------------------------------
-    // SECCION 2: HERO - NOTA FINAL
-    // Caja centrada ancha con la nota en grande.
-    // Debajo, tres pills de estadisticas en fila.
+    // SECCION 2: BANDA "TAREA ENTREGADA"
+    // Sustituye al antiguo hero con la nota final visible.
+    // No mostramos puntaje ni nota. La nota va codificada en el footer.
     // ----------------------------------------------------------------
-    const heroW = contentW;
-    const heroH = 36;
-    const heroX = M;
+    const bandH = 18;
+    const bandX = M;
+    borderedBox(bandX, y, contentW, bandH, T.bgSoft, T.primary, 0.6);
+    // Borde izquierdo grueso de color primary como acento
+    fillBox(bandX, y, 3, bandH, T.primary);
 
-    shadowBorderedBox(heroX, y, heroW, heroH, T.bg, T.primary, 1);
+    // Etiqueta a la izquierda
+    setText(T.textSoft, 'bold', 8);
+    doc.text('ESTADO', bandX + 8, y + 7);
 
-    // Etiqueta "NOTA FINAL" - pequena, sobre el numero
-    setText(T.dark, 'bold', 8);
-    doc.text('NOTA FINAL', PW / 2, y + 9, { align: 'center' });
+    // Texto principal: tarea entregada + fecha
+    setText(T.dark, 'bold', 12);
+    doc.text('Tarea entregada', bandX + 8, y + 13.5);
 
-    // Numero grande centrado
-    setText(T.accent, 'bold', 40);
-    doc.text(String(score.grade), PW / 2, y + 27, { align: 'center' });
+    // Fecha alineada a la derecha
+    setText(T.textSoft, 'normal', 9);
+    doc.text(today, bandX + contentW - 5, y + 12, { align: 'right' });
 
-    // "/10" pequeno alineado a la derecha del numero grande
-    // Calcular posicion aproximada: el numero esta centrado, lo ponemos un poco a la derecha
-    const gradeStrW = doc.getStringUnitWidth(String(score.grade)) * 40 / doc.internal.scaleFactor;
-    setText(T.dark, 'normal', 10);
-    doc.text('/ 10', PW / 2 + gradeStrW / 2 + 3, y + 27, { align: 'left' });
-
-    y += heroH + 5;
-
-    // --- Pills de estadisticas (fila de 2 o 3 segun si hay extra) ---
-    const hasExtra = state.extraPoints > 0;
-    const pillCount = hasExtra ? 3 : 2;
-    const pillGap = 4;
-    const pillW = (contentW - pillGap * (pillCount - 1)) / pillCount;
-    const pillH = 11;
-
-    const pills = [
-      { label: 'ACIERTOS', value: score.earned + ' de ' + score.total }
-    ];
-    if (hasExtra) {
-      pills.push({ label: 'NOTA BASE', value: score.baseGrade + ' / 10' });
-      pills.push({ label: 'PUNTOS EXTRA', value: '+' + state.extraPoints.toFixed(1), highlight: true });
-    } else {
-      pills.push({ label: 'NOTA BASE', value: score.baseGrade + ' / 10' });
-    }
-
-    pills.forEach(function(pill, i) {
-      const px = M + i * (pillW + pillGap);
-      const fillColor = pill.highlight ? T.accent : T.primary;
-      const textColor = pill.highlight ? T.onAccent : T.onPrimary;
-      shadowBox(px, y, pillW, pillH, fillColor);
-      setText(textColor, 'bold', 7);
-      doc.text(pill.label, px + pillW / 2, y + 4, { align: 'center' });
-      setText(textColor, 'bold', 9);
-      doc.text(pill.value, px + pillW / 2, y + 9, { align: 'center' });
-    });
-
-    y += pillH + 10;
+    y += bandH + 8;
 
     // ----------------------------------------------------------------
     // SECCION 3: TARJETA DE EQUIPO
@@ -1502,31 +1546,45 @@
       setText(T.dark, 'bold', 10);
       doc.text(title, M + 10, y);
 
-      // Badge resultado (esquina derecha)
+      // Badge de estado (esquina derecha) - sin revelar puntaje
+      // Solo decimos si el ejercicio fue entregado o no, y un punto de color
+      // como guia visual interna (verde/ambar/rojo) que no incluye la cifra.
       let badgeColor = S.lightGray;
-      let badgeText  = 'pendiente';
+      let badgeText  = 'Pendiente';
       let badgeTC    = S.gray;
+      let dotColor   = null;
 
       if (ans) {
         const pct = ans.total > 0 ? ans.score / ans.total : 0;
-        badgeText = ans.score + ' / ' + ans.total;
-        if (pct >= 0.7)      { badgeColor = S.green;  badgeTC = S.white; }
-        else if (pct >= 0.4) { badgeColor = S.amber;  badgeTC = T.dark; }
-        else                 { badgeColor = S.red;    badgeTC = S.white; }
+        badgeText = 'Completado';
+        badgeColor = T.bgSoft;
+        badgeTC = T.textSoft;
+        if (pct >= 0.7)      dotColor = S.green;
+        else if (pct >= 0.4) dotColor = S.amber;
+        else                 dotColor = S.red;
       }
 
-      const bw = 28, bh = 6;
+      const bw = 32, bh = 6;
       const bx = right - bw;
       const by = y - 4.5;
-      fillBox(bx, by, bw, bh, badgeColor);
-      setText(badgeTC, 'bold', 8);
-      doc.text(badgeText, bx + bw / 2, by + 4.2, { align: 'center' });
+      borderedBox(bx, by, bw, bh, badgeColor, T.divider, 0.3);
+      setText(badgeTC, 'bold', 7.5);
+      // Si hay punto de color, dibujamos el punto a la izquierda y centramos texto
+      if (dotColor) {
+        doc.setFillColor(dotColor[0], dotColor[1], dotColor[2]);
+        doc.circle(bx + 3.2, by + 3, 1.1, 'F');
+        doc.text(badgeText, bx + bw / 2 + 1.2, by + 4.1, { align: 'center' });
+      } else {
+        doc.text(badgeText, bx + bw / 2, by + 4.1, { align: 'center' });
+      }
 
       y += 5;
 
-      // Detalles del ejercicio
-      if (ans && ans.details && Array.isArray(ans.details) && ans.details.length) {
-        setText(S.gray, 'normal', 8);
+      // Detalles del ejercicio (lista interna). Si el profesor pone
+      // pdfHideDetails:true en el config, se oculta tambien para que el PDF
+      // sea aun mas neutro (ni siquiera revela respuestas correctas/incorrectas).
+      if (!cfg.pdfHideDetails && ans && ans.details && Array.isArray(ans.details) && ans.details.length) {
+        setText(T.textMuted, 'normal', 8);
         ans.details.forEach(function(d) {
           if (y > PH - 20) { doc.addPage(); y = 15; }
           const line = '  ' + sanitizeForPDF(d);
@@ -1541,28 +1599,46 @@
 
     // ----------------------------------------------------------------
     // SECCION 5: JUEGO FINAL (si existe)
-    // Muestra el tipo de juego. Los puntos extra ya aparecen en las
-    // pills de la seccion 2, no se repiten aqui.
+    // Muestra el tipo de juego, sin revelar resultado.
     // ----------------------------------------------------------------
     if (cfg.game) {
       if (y > PH - 25) { doc.addPage(); y = 15; }
       y += 4;
-      borderedBox(M, y, contentW, 9, T.bg, T.accent, 0.8);
+      borderedBox(M, y, contentW, 9, T.bgSoft, T.accent, 0.6);
       fillBox(M, y, 3, 9, T.accent);
       setText(T.dark, 'bold', 9);
       doc.text('JUEGO FINAL:', M + 8, y + 6);
-      setText(S.darkGray, 'normal', 9);
+      setText(T.textSoft, 'normal', 9);
       doc.text(sanitizeForPDF(cfg.game.type).toUpperCase(), M + 42, y + 6);
       y += 13;
     }
 
     // ----------------------------------------------------------------
-    // FOOTER
+    // FOOTER (en TODAS las paginas)
+    // Codigo de referencia que incluye la nota cifrada en numeros romanos.
+    // Formato: "Ref. <ROMANOS>-<YYYY>-<HASH4>"
+    // Solo el profesor sabe que el primer bloque codifica la nota real.
     // ----------------------------------------------------------------
-    const footerY = PH - 8;
-    hline(M, right, footerY - 4, T.divider, 0.3);
-    setText(S.gray, 'italic', 7);
-    doc.text('COEDUCA - Reporte generado automaticamente', PW / 2, footerY, { align: 'center' });
+    const refCode = buildReferenceCode(score.grade, stu.nie, cfg.topic);
+
+    function drawFooterOnAllPages() {
+      const totalPages = doc.internal.getNumberOfPages();
+      const footerY = PH - 8;
+      for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        hline(M, right, footerY - 4, T.divider, 0.3);
+        // Lado izquierdo: marca + autor (texto neutro)
+        setText(T.textMuted, 'italic', 7);
+        doc.text('COEDUCA - Prof. Jose Eliseo Martinez', M, footerY);
+        // Centro: numero de pagina
+        setText(T.textMuted, 'normal', 7);
+        doc.text('Pag. ' + p + ' de ' + totalPages, PW / 2, footerY, { align: 'center' });
+        // Lado derecho: codigo de referencia (lleva la nota cifrada)
+        setText(T.textMuted, 'normal', 7);
+        doc.text(refCode, right, footerY, { align: 'right' });
+      }
+    }
+    drawFooterOnAllPages();
 
     // FIX iOS: usar blob + URL en lugar de doc.save()
     try {
